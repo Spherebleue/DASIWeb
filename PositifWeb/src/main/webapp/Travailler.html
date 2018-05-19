@@ -17,12 +17,17 @@ and open the template in the editor.
         <p id="fenetreTravail">
             <FONT size="20">ATTENTE D'UN CLIENT </FONT>
         </p>
+        <div id="cachee">caché</div>
         
         
         <script>
-            var idAttente = setInterval(attenteClient(), 3000);
+            $(document).ready(function () {
+               attenteClient();
+            });
+    
             
             function attenteClient(){
+                setTimeout( function(){
                 $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
@@ -30,10 +35,30 @@ and open the template in the editor.
                         action: 'attenteClient'
                     },
                    dataType: 'json'
-                }).done(function () {
-                    clearInterval(idAttente);
-                    window.location="TravailConversation.html";
-                });
+                }).done(function (data) {
+                    
+                    var prenom = data.personne.prenom;
+                    if(prenom=="pas de client en attente")
+                    {
+                        console.log(prenom);
+                        $('#cachee').html('Bonjour '+prenom+' ! Que sou vous faire ?');
+                        var newLink = document.getElementById('cachee');
+                        var aaa = document.createElement('p');
+                        var txt1 = document.createTextNode(data.personne.prenom);
+                        aaa.appendChild(txt1);
+                        newLink.appendChild(aaa);
+                    }else {
+                         $('#cachee').html('Bogdsfhre ?');
+                         window.location="TravailConversation.html";
+                    }
+                    
+                   // 
+                }).fail(function( jqXHR, textStatus ) {
+    alert( "Request failed: " + textStatus );
+  });
+                attenteClient(); // on relance la fonction
+    }, 5000); // on exécute le chargement toutes les 5 secondes
+                //clearInterval(idAttente);
             }
         
         </script>
