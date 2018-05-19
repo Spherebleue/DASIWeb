@@ -244,11 +244,10 @@ public class ActionServlet extends HttpServlet {
                     {
                         PrintPersonne PP = new PrintPersonne();
                         PP.execute(out, (Personne)conv.getClient());
-                        response.setStatus(200);
                     }else
                     {
                         PrintString PS = new PrintString();
-			PS.execute(out, "pas de client en attente"); response.setStatus(403);
+			PS.execute(out, "pas de client en attente"); 
                     }
 		    response.setStatus(200);
                 }    
