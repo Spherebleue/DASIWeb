@@ -16,7 +16,6 @@ and open the template in the editor.
         <div id="retour">
         <input type="button" value="Retour Menu" OnClick="javascript:location.href='MenuEmp.html'">
         </div>
-        <div id = intro></div>
         
         <table style="width:100%">
             <tr>
@@ -104,6 +103,7 @@ and open the template in the editor.
         
         <script>
             
+            
             function attributClient ()
             {
                 $.ajax({
@@ -126,8 +126,6 @@ and open the template in the editor.
                         row.appendChild(tup1);
                         row.appendChild(tup2);
                         newLink.appendChild(row);
-                        
-                        var introduction = 
                     }
                 });
             }
@@ -137,6 +135,24 @@ and open the template in the editor.
                document.getElementById("bouton_terminer").disabled = true;
                document.getElementById("bouton-predictions").disabled = true;
             });
+            
+            var idAttente = setInterval(attenteConvTerminee(), 3000);
+            
+            function attenteConvTerminee()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'conversationTerminee'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    terminer ();
+                }).fail(function(){
+                    
+                });
+            }
             
             function commencer () {
                 $.ajax({
@@ -154,9 +170,7 @@ and open the template in the editor.
             }
             
             function promptCommentaire() {
-                var commentaire = prompt("merci de laisser un commentaire", "\n\
-        \n\
-");
+                var commentaire = prompt("Veuillez laisser un commentaire pour facilier le suivi du client", "");
                 
                 $.ajax({
                     url: './ActionServlet',
@@ -166,26 +180,24 @@ and open the template in the editor.
                         comment: commentaire
                     },
                    dataType: 'json'
-                }).done(function (data) {
-                    var newLink = document.getElementById('term');
-                    var txt1 = document.createTextNode(data.personne.prenom);
-                    newLink.appendChild(txt1);
+                }).done(function () {
                     document.getElementById("bouton_terminer").disabled = true;
                     document.getElementById("bouton-predictions").disabled = true;
                     document.getElementById("bouton_commencer").disabled = false;
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            action: 'terminerVoyance',
+                            comment: commentaire
+                        },
+                       dataType: 'json'
+                    });
                 });
                 
             }
             
             function terminer () {
-                $.ajax({
-                    url: './ActionServlet',
-                    method: 'POST',
-                    data: {
-                        action: 'terminerVoyance'
-                    },
-                   dataType: 'json'
-                });
                 promptCommentaire();
                 window:location="Travailler.html";
             }

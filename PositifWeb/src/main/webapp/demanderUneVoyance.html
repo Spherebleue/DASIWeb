@@ -61,16 +61,15 @@ and open the template in the editor.
                         opt.appendChild(newLinkText);
                         newLink.appendChild(opt);
                     }
-                    
-                    $('#parti').on('click', function () {
-                        // affichage pour debugage dans la console javascript du navigateur
-                        console.log('Click sur le bouton "C\'est Parti"');
-                        // appel de la fonction connexion
-                        demanderVoyance();
-                    });
-                    
                 }).fail(function(){
                     $('#message').html('Aucun voyant n\'est disponible aujourd\'hui');
+                });
+                
+                $('#parti').on('click', function () {
+                    // affichage pour debugage dans la console javascript du navigateur
+                    console.log('Click sur le bouton "C\'est Parti"');
+                    // appel de la fonction connexion
+                    demanderVoyance();
                 });
             });
             
@@ -83,7 +82,6 @@ and open the template in the editor.
                 var valeur_cherchee = list_med.options[choice].value;
                 // newLink.textContent=valeur_cherchee;
                 chargerBio(valeur_cherchee);
-                
             }); 
             
             function demanderVoyance()
@@ -116,6 +114,24 @@ and open the template in the editor.
                     },
                    dataType: 'json'
                 }).done(function (data) {
+                    
+                });
+            }
+            
+            var idAttente = setInterval(attenteConvTerminee(), 3000);
+            
+            function attenteConvTerminee()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'conversationTerminee'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    terminerVoyance();
+                }).fail(function(){
                     
                 });
             }
