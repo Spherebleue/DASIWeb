@@ -247,9 +247,12 @@ public class ActionServlet extends HttpServlet {
                         response.setStatus(200);
                     }else
                     {
-                        response.setStatus(403);
+                        PrintString PS = new PrintString();
+			PS.execute(out, "pas de client en attente"); response.setStatus(403);
                     }
+		    response.setStatus(200);
                 }    
+	        response.setStatus(200);
             case "demandeAttributClient":
                 action = new ActionDemanderAttributClient();
                 action.execute(request);
