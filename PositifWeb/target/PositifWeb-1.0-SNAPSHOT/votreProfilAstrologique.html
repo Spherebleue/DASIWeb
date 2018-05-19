@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Votre Profil Astrologique</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="newCascadeStyleSheet.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    </head>
+    <body>
+        <div id="retour">
+        <input type="button" value="Retour Menu" OnClick="javascript:location.href='menuClient.html'">
+        </div>
+        <br>
+        <div>
+            <h1>
+                Voici votre Profil Astrologique
+            </h1>
+            <br>
+            <div id="gauche">
+                <a>Signe du Zodiaque</a>
+                <div id="signeZod"></div>
+                <br>
+                <a>Couleur porte-bonheur</a>
+                <div id="couleur"></div>
+            </div>
+            <div id="droite">
+                <a>Signe astrologique chinois</a>
+                <div id="signeChinois"></div>
+                <br>
+                <a>Animal totem</a>
+                <div id="animal"></div>
+            </div>
+        </div>
+        
+        <script>
+             $(document).ready(function () {
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'afficherProfil'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    $('#signeZod').html(data.profil.signeZod);
+                    $('#signeChinois').html(data.profil.signeChinois);
+                    $('#couleur').html(data.profil.couleur);
+                    $('#animal').html(data.profil.animal);
+                });
+                
+             });
+        
+        </script>
+                
+    </body>
+</html>

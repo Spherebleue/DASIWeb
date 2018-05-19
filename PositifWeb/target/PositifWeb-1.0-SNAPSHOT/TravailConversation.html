@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Employé POSIT'IF - Travailler</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    </head>
+    <body>
+        <div id="retour">
+        <input type="button" value="Retour Menu" OnClick="javascript:location.href='MenuEmp.html'">
+        </div>
+        
+        <table style="width:100%">
+            <tr>
+                <th style="width:50%">
+                    <table id="AttributClient" style="border: solid">
+                        <tr>
+                            <th style="width:50%">
+                                Attribut
+                            </th>
+                            <th style="width:50%">
+                                Contenu
+                            </th>
+                        </tr>
+                    </table>
+                </th>
+                <th style="width:50%">
+                    <div id="Prediction"> 
+                         <table style="width:100%">
+                            <tr>
+                                <th style="width:30%">
+                                    <div id="Amour"> 
+                                        <a> - </a>
+                                        <input type="range" min="1" max="100" value="50" id="Range-Amour">
+                                        <a> + </a>
+                                    </div>
+                                </th>
+                                <th style="width:20%"> Amour </th>
+                                <th style="width:50%">
+                                    <div id="PredictionAmour"> 
+                                        PredictionAmour
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="width:30%">
+                                    <div id="Sante">
+                                        <a>-</a>
+                                        <input type="range" min="1" max="100" value="50" id="Range-Sante">
+                                        <a>+</a>
+                                    </div>
+                                </th>
+                                <th style="width:20%"> Santé </th>
+                                <th style="width:50%">
+                                    <div id="PredictionSante"> 
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="width:30%">
+                                    <div id="Travail">
+                                        <a>-</a>
+                                        <input type="range" min="1" max="100" value="50" id="Range-Travail">
+                                        <a>+</a>
+                                    </div>
+                                </th>
+                                <th style="width:20%"> Travail </th>
+                                <th style="width:50%">
+                                    <div id="PredictionTravail"> 
+                                    </div>
+                                </th>
+                            </tr>
+                        </table>
+                            <input type="button" id ="bouton-predictions" value="Prédictions" disabled>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th style="width:50%">
+                    <div id="demandeClient">zqfrdsqhgqdh  </div> 
+                </th>
+                <th style="width:50%">
+                    <div id="InfoDetaille"> fdhdwjdwgtj</div>
+                </th>
+            </tr>
+        </table> 
+        
+        <table   style="width:100%">
+            <th style="width:50%">
+                <input style="width:100%" type="button" id ="bouton_commencer" value="Commencer" onclick="commencer()">
+            </th>
+            <th style="width:50%">
+                <input style="width:100%" type="button" id ="bouton_terminer" value="Terminer" onclick="terminer()" disabled >
+            </th>
+        </table>
+        
+        <script>
+            
+            
+            function attributClient ()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'demandeAttributClient'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    var newLink = document.getElementById('AttributClient');
+                    for (var iter = 0; iter < data.listeProprieteClt.length; iter++) {
+                        var row = document.createElement('tr');
+                        var tup1 = document.createElement('th');
+                        var tup2 = document.createElement('th');
+                        var txt1 = document.createTextNode(data.listeProprieteClt[iter].nom);
+                        var txt2 = document.createTextNode(data.listeProprieteClt[iter].valeur);
+                        tup1.appendChild(txt1);
+                        tup2.appendChild(txt2);
+                        row.appendChild(tup1);
+                        row.appendChild(tup2);
+                        newLink.appendChild(row);
+                    }
+                });
+            }
+            
+            $(document).ready(function () {
+               attributClient(); 
+               document.getElementById("bouton_terminer").disabled = true;
+               document.getElementById("bouton-predictions").disabled = true;
+            });
+            
+            var idAttente = setInterval(attenteConvTerminee(), 3000);
+            
+            function attenteConvTerminee()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'conversationTerminee'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    terminer ();
+                }).fail(function(){
+                    
+                });
+            }
+            
+            function commencer () {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'accepterVoyance'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    document.getElementById("bouton_terminer").disabled = false;
+                    document.getElementById("bouton-predictions").disabled = false;
+                    document.getElementById("bouton_commencer").disabled = true;
+                });
+            }
+            
+            function promptCommentaire() {
+                var commentaire = prompt("Veuillez laisser un commentaire pour facilier le suivi du client", "");
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'commenterVoyance',
+                        comment: commentaire
+                    },
+                   dataType: 'json'
+                }).done(function () {
+                    document.getElementById("bouton_terminer").disabled = true;
+                    document.getElementById("bouton-predictions").disabled = true;
+                    document.getElementById("bouton_commencer").disabled = false;
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            action: 'terminerVoyance',
+                            comment: commentaire
+                        },
+                       dataType: 'json'
+                    });
+                });
+                
+            }
+            
+            function terminer () {
+                promptCommentaire();
+                window:location="Travailler.html";
+            }
+
+        </script>
+        
+        
+    </body>
+    
+    
+    
+    
+    
+</html>

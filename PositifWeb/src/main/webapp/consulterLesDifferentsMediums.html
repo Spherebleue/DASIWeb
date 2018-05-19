@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>POSITIF - Les mediums</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="newCascadeStyleSheet.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ 
+    </head>
+    <body>
+        <div id="retour">
+        <input type="button" value="Retour Menu" OnClick="javascript:location.href='menuClient.html'">
+        </div>
+        <br>
+        <div>
+            <h1>
+               Voici nos médiums, parmi les plus réputés de l'univers
+               
+            </h1>
+        </div>
+        <div id="gauche">
+           <select id="list_medium" name="select2" >
+               
+            </select>
+        </div>
+        <div id = "droite">
+           
+        </div>
+        
+        <script>
+            $(document).ready(function () {
+                
+
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'ObtenirTousMediums'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    
+                    
+                    var newLink = document.getElementById('list_medium');
+                    newLink.size=data.liste.length+1;
+                    
+                    var opt = document.createElement('option');
+                    var newLinkText = document.createTextNode(data.mediumJour.Nom);
+                    opt.appendChild(newLinkText);
+                    newLink.appendChild(opt);
+
+                    for (var iter = 0; iter < data.liste.length; iter++) {
+                        var opt = document.createElement('option');
+                        var newLinkText = document.createTextNode(data.liste[iter].Nom+', '+data.liste[iter].Specialite);
+                        opt.appendChild(newLinkText);
+                        newLink.appendChild(opt);
+                    }
+
+                    
+                    
+                }).fail(function(){
+                    $('#message').html('Aucun voyant n\'est disponible aujourd\'hui');
+                });
+            });
+            
+            $('#list_medium').change(function(){
+                var newLink = document.getElementById('bio');
+                var list_med = document.getElementById('list_medium');
+                 
+                var choice = list_med.selectedIndex  // Récupération de l'index du <option> choisi
+               var valeur_cherchee = list_med.options[choice].value;
+               // newLink.textContent=valeur_cherchee;
+               chargerBio(valeur_cherchee);
+                
+            }); 
+            
+            function chargerBio(nomMedium)
+            {
+              
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'ObtenirBio',
+                        nomMedium:nomMedium
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    var Parabio = document.getElementById('droite');
+                    
+                    while (Parabio.firstChild) {
+                        Parabio.removeChild(Parabio.firstChild);
+                    }
+                    var espaceMessage = document.createElement('p');
+                    
+                    //affiche le nom
+                    var espaceNom = document.createElement('a');
+                    var nom=data.mediumS.Nom;
+                    var newLinkText = document.createTextNode(nom+'\n');
+                    espaceNom.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceNom);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche la bio
+                    var espaceBio = document.createElement('a');
+                    var bio=data.mediumS.Bio;
+                    var newLinkText2 = document.createTextNode(bio);
+                    espaceBio.appendChild(newLinkText2);
+                    espaceMessage.appendChild(espaceBio);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche la spécialité
+                    var espaceSpecialite = document.createElement('a');
+                    var Specialite=data.mediumS.Specialite;
+                    var newLinkText = document.createTextNode(Specialite);
+                    espaceSpecialite.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceSpecialite);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                     //affiche les caracteristiques de la spécialité
+                    if(Specialite== "Astrologue")
+                    {
+                       //Affiche l'ecole
+                        var espaceEcole = document.createElement('a');
+                        var Ecole=data.mediumS.Ecole;
+                        var newLinkText = document.createTextNode(Ecole);
+                        espaceEcole.appendChild(newLinkText);
+                        espaceMessage.appendChild(espaceEcole);
+                        espaceMessage.appendChild(document.createElement('br'));
+                        
+                        //Affiche la promotion
+                        var espacePromotion = document.createElement('a');
+                        var Promotion=data.mediumS.Promotion;
+                        var newLinkText = document.createTextNode(Promotion);
+                        espacePromotion.appendChild(newLinkText);
+                        espaceMessage.appendChild(espacePromotion);
+                        espaceMessage.appendChild(document.createElement('br'));
+                        
+                    }else if(Specialite=="Tarologue"){
+                        
+                        //Affiche les cartes
+                        var espaceCartes = document.createElement('a');
+                        var Cartes=data.mediumS.Cartes;
+                        var newLinkText = document.createTextNode(Cartes);
+                        espaceCartes.appendChild(newLinkText);
+                        espaceMessage.appendChild(espaceCartes);
+                        espaceMessage.appendChild(document.createElement('br'));
+                        
+                    }else{
+                        
+                        //Affiche le Support
+                        var espaceSupport = document.createElement('a');
+                        var Support=data.mediumS.Support;
+                        var newLinkText = document.createTextNode(Support);
+                        espaceSupport.appendChild(newLinkText);
+                        espaceMessage.appendChild(espaceSupport);
+                        espaceMessage.appendChild(document.createElement('br'));
+                    }
+                    
+                    Parabio.appendChild(espaceMessage);
+                    
+                });
+            }
+        </script>
+    </body>
+</html>

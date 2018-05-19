@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>POSITIF - Menu</title>
+        <link rel="stylesheet" href="newCascadeStyleSheet.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <div id="retour">
+            <input type="button" value="Deconnexion" id ="Deconnexion">
+            <br>
+            <a> </a>
+            <br> 
+            <br>    
+        </div>
+        <br>
+        <h1>Menu</h1>
+        <br>
+        <div id="message"> Bonjour [Prénom] ! Que souhaitez vous faire ? </div>
+        <br>
+        <p>
+            <br>
+            <input type="button" value="Votre Profil Astrologique" OnClick="javascript:location.href='votreProfilAstrologique.html'">
+            <br>
+            <input type="button" value="Consulter les différents médiums" OnClick="javascript:location.href='consulterLesDifferentsMediums.html'">
+            <br>
+            <input type="button" value="Demander une voyance" OnClick="javascript:location.href='demanderUneVoyance.html'">
+            <br>
+            <input type="button" value="Consulter l'historique de mes demandes" OnClick="javascript:location.href='consulterlhistoriqueDeMesDemandes.html'">            
+            <br>
+        </p>
+            
+        
+        
+        <script>
+            
+            function deconnexion()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'deconnexion'
+                    },
+                   dataType: 'json'
+                });
+            }
+            
+            
+            $(document).ready(function () {
+                
+                $('#Deconnexion').on('click', function () {
+                    // affichage pour debugage dans la console javascript du navigateur
+                    console.log('Click sur le bouton "Deconnexion"');
+                    // appel de la fonction connexion
+                    deconnexion();
+                    window.location='AccueilClient.html';
+                });
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'afficherNom'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    var prenom = data.personne.prenom;
+                    console.log(prenom);
+                    $('#message').html('Bonjour '+prenom+' ! Que souhaitez vous faire ?');
+                });
+                
+            });
+            
+        </script>
+        
+    </body>
+</html>

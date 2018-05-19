@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+       <title>POSITIF - L'historique de vos demandes</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="newCascadeStyleSheet.css">
+
+    </head>
+    <body>
+        <div id="retour">
+        <input type="button" value="Retour Menu" OnClick="javascript:location.href='menuClient.html'">
+        </div>
+        <br>
+        <div>
+            <h1>
+                Voici vos dernières demandes
+            </h1>
+        </div>
+        <div id="gauche"> liste des demandes</div>
+        <div id="droite"> info detaillées de la demande</div>
+        
+        <script>
+             $(document).ready(function () {
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'ObtenirHistoriqueClient'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    
+                    var newLink = document.getElementById('list_medium');
+                    newLink.size=data.liste.length+1;
+                    
+                    
+                    //CHANGER NOM POUR DATA.TRUC.BIDULE
+                    var opt = document.createElement('option');
+                    var newLinkText = document.createTextNode(data.mediumJour.Nom);
+                    opt.appendChild(newLinkText);
+                    newLink.appendChild(opt);
+
+                    for (var iter = 0; iter < data.liste.length; iter++) {
+                        var opt = document.createElement('option');
+                        var newLinkText = document.createTextNode(data.liste[iter].Nom, data.liste[iter].Specialite);
+                        opt.appendChild(newLinkText);
+                        newLink.appendChild(opt);
+                    }
+
+                }).fail(function(){
+                    $('#message').html('Aucun voyant n\'est disponible aujourd\'hui');
+                });
+            });
+        </script>
+        
+        
+        
+    </body>
+</html>

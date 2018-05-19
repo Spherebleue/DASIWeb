@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Employe POSITIF - Menu</title>
+        <meta charset="UTF-8">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <style type="text/css">
+            h1 { text-align: center; }
+            .highcharts-container {
+                max-width: 100%;
+                margin: 1em auto;
+            }
+        </style>
+    </head>
+    <body>
+        <input type="button" value="Déconnexion" onclick="javascript:location.href='AccueilEmp.html'">
+         
+        <div id="message">Bonjour [Prénom] ! Que souhaitez vous faire ?</div>
+         
+        <h1> Tableau de bord </h1>
+         <table style="width:100%">
+            <tr>
+                <th style="width:33%"><div id="VoyParMedium" class="highcharts-container"> </div></th>
+                <th style="width:33%"><div id="VoyParEmp" class="highcharts-container"> </div></th>
+                <th style="width:33%"><div id="PourcVoyance" class="highcharts-container"> </div></th>
+            </tr>
+        </table> 
+        
+        <br>
+        <input type="button" value="Travailler" onclick="javascript:location.href='Travailler.html'">
+        
+        
+        <script type="text/javascript">
+       
+            function deconnexion()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'deconnexion'
+                    },
+                   dataType: 'json'
+                });
+            }
+            
+            function VoyParMedium()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'voyParMedium'
+                    },
+                   dataType: 'json'
+                }).done( function (data) {
+                    var lineChartData = {
+                        labels : [],
+                        data : []
+                    };
+                    for (var iter = 0; iter < data.duosHisto.length; iter++) {
+                        lineChartData.labels.push(data.duosHisto[iter].Nom);
+                        lineChartData.data.push(data.duosHisto[iter].Valeur);    
+                    }
+                    buildBarChart('VoyParMedium', lineChartData, "Voyance par médium");
+                });
+            }
+            
+            function VoyParEmp()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'voyParEmp'
+                    },
+                   dataType: 'json'
+                }).done( function (data) {
+                    var lineChartData = {
+                        labels : [],
+                        data : []
+                    };
+                    for (var iter = 0; iter < data.duosHisto.length; iter++) {
+                        lineChartData.labels.push(data.duosHisto[iter].Nom);
+                        lineChartData.data.push(data.duosHisto[iter].Valeur);    
+                    }
+                    buildBarChart('VoyParEmp', lineChartData, "Voyance par employé");
+                });
+            }
+            
+            function PourcVoyance()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'pourcVoyance'
+                    },
+                   dataType: 'json'
+                }).done( function (data) {
+                    var proportionChartData = {
+                        label: 'Temps de Parole (min)',
+                        data: []
+                    };
+                    
+                    for (var iter = 0; iter < data.duosHisto.length; iter++) {
+                        
+                        var nouvObjet = {
+                            name:'',
+                            y:4.10
+                        };
+                        nouvObjet.name = data.duosHisto[iter].Nom;
+                        nouvObjet.y = data.duosHisto[iter].Valeur;
+                        proportionChartData.data.push(nouvObjet);    
+                    }
+                    buildPieChart('PourcVoyance', proportionChartData);
+                });
+            }
+            
+            function AfficherNom()
+            {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'afficherNom'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    var prenom = data.personne.prenom;
+                    $('#message').html('Bonjour '+prenom+' ! Que souhaitez vous faire ?');
+                });
+            }
+            
+            
+            $(document).ready(function () {
+                
+                VoyParMedium();
+                PourcVoyance();
+                VoyParEmp();
+                
+                $('#Deconnexion').on('click', function () {
+                    // affichage pour debugage dans la console javascript du navigateur
+                    console.log('Click sur le bouton "Deconnexion"');
+                    // appel de la fonction connexion
+                    deconnexion();
+                    window.location='AcceuilEmp.html';
+                });
+                
+                AfficherNom();
+            });
+            
+            
+            
+            function buildBarChart(container, graphData, titre) {
+
+                Highcharts.chart(container, {
+
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: titre,
+                        verticalAlign: "bottom"
+                    },
+                    subtitle: {
+                        text: 'Source: PositIF'
+                    },
+                    xAxis: {
+                        categories: graphData.labels
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Nb voyances'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{name: 'Données', data: graphData.data}]
+                });
+            }
+            
+            function buildPieChart(container, graphData) {
+
+                Highcharts.chart(container, {
+
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: "Pourcentage de voyance par employé",
+                        verticalAlign: "bottom"
+                    },
+                    subtitle: {
+                        text: 'Source: PositIF'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{name: graphData.label, data: graphData.data}]
+                });
+            }
+            
+        </script>
+        
+        
+        
+    </body>
+</html>
