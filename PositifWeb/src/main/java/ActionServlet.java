@@ -8,7 +8,6 @@ import Action.ActionAttenteClient;
 import Action.ActionCommenterVoyance;
 import Action.ActionConnectionClient;
 import Action.ActionConnectionEmp;
-import Action.ActionConversationTerminee;
 import Action.ActionDemanderAttributClient;
 import Action.ActionDemanderVoyance;
 import Action.ActionInscriptionClient;
@@ -244,12 +243,16 @@ public class ActionServlet extends HttpServlet {
                     {
                         PrintPersonne PP = new PrintPersonne();
                         PP.execute(out, (Personne)conv.getClient());
-                        response.setStatus(200);
+                        
                     }else
                     {
-                        response.setStatus(403);
+                        PrintString PS = new PrintString();
+                        PS.execute(out, "pas de client en attente");
                     }
+                    response.setStatus(200);
                 }    
+                
+                response.setStatus(200);
             case "demandeAttributClient":
                 action = new ActionDemanderAttributClient();
                 action.execute(request);
@@ -263,7 +266,6 @@ public class ActionServlet extends HttpServlet {
             case "demanderVoyance":
                 action = new ActionDemanderVoyance();
                 String nom = request.getParameter("medium");
-                //erreur de relation LAZY si dans l'action :( 
                 List<Medium> mediums = Services.ObtenirTousMediums();
                 Medium m2 = mediums.get(0);
                 for(Medium m : mediums) {
@@ -313,22 +315,6 @@ public class ActionServlet extends HttpServlet {
                     PS.execute(out,"CommenterVoyanceTermine");
                 }  
                 response.setStatus(200);
-            case "conversationTerminee":
-                action = new ActionConversationTerminee();
-                action.execute(request);
-                try (PrintWriter out = response.getWriter()) {
-                    boolean rep = (boolean)request.getAttribute("convTerminee");
-                    PrintString PS= new PrintString();
-                    if(rep)
-                    {
-                        PS.execute(out,"Conversation terminée");
-                        response.setStatus(200);
-                    }else{
-                        PS.execute(out,"Conversation en cours");
-                        response.setStatus(403);
-                    }
-                }  
-                break;
             default:
                 break;
         }  

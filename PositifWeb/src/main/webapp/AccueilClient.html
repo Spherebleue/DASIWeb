@@ -54,7 +54,9 @@
                 }).done(function (data) {
                     window.location='menuClient.html';
                 }).fail(function(){
+                    document.getElementById("bouton-connexion").disabled = false;
                     $('#message').html('Echec de connexion');
+                    document.getElementById("bouton-connexion").disabled = false;
                 });
             }
             
@@ -92,6 +94,7 @@
                     }).done(function (data) {
                         window.location="votreProfilAstrologique.html";
                     }).fail(function(){
+                        document.getElementById("bouton-inscription").disabled = false;
                         $('#messageInscription').html("Echec de l'inscription");
                     });
                 }

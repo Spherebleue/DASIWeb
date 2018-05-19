@@ -24,7 +24,9 @@ public class ActionDemanderVoyance extends Action {
     public void execute(HttpServletRequest request) {
        HttpSession session = request.getSession();
        Medium m2 = (Medium) request.getAttribute("med");
+       System.out.println(m2);
        Client clt = (Client) session.getAttribute("Personne");
+       System.out.println(clt);
        Conversation conv = DemanderVoyance(clt,m2);
        request.setAttribute("Conversation",conv);
        session.setAttribute("Conversation",conv);
