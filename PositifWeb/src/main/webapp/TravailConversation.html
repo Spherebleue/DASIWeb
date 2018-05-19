@@ -16,7 +16,7 @@ and open the template in the editor.
         <div id="retour">
         <input type="button" value="Retour Menu" OnClick="javascript:location.href='MenuEmp.html'">
         </div>
-        
+        <div id = intro></div>
         <table style="width:100%">
             <tr>
                 <th style="width:50%">
@@ -181,6 +181,9 @@ and open the template in the editor.
                     },
                    dataType: 'json'
                 }).done(function () {
+                    var newLink = document.getElementById('term');
+                    var txt1 = document.createTextNode(data.personne.prenom);
+                    newLink.appendChild(txt1);
                     document.getElementById("bouton_terminer").disabled = true;
                     document.getElementById("bouton-predictions").disabled = true;
                     document.getElementById("bouton_commencer").disabled = false;
