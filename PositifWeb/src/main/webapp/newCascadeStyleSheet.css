@@ -12,10 +12,6 @@ html{
     height: 100vh;
 }
 
-br{
-    
-}
-
 body
 {
 background-color: lightgrey;
@@ -42,6 +38,17 @@ height:100%;
     float: left
 }
 
+#message{
+    position:fixed; 
+    width:100%;
+    text-align:center;
+}
+
 input{
     border-radius: 5px;
+}
+
+input[type="button"]{
+    border-radius: 3px;
+    padding: 4px;
 }
