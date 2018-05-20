@@ -18,24 +18,36 @@ and open the template in the editor.
         </div>
         <br>
         <div>
-            <h1>
+            <h1 style="text-align: center">
                 Voici votre Profil Astrologique
             </h1>
             <br>
-            <div id="gauche">
-                <a>Signe du Zodiaque</a>
-                <div id="signeZod"></div>
-                <br>
-                <a>Couleur porte-bonheur</a>
-                <div id="couleur"></div>
-            </div>
-            <div id="droite">
-                <a>Signe astrologique chinois</a>
-                <div id="signeChinois"></div>
-                <br>
-                <a>Animal totem</a>
-                <div id="animal"></div>
-            </div>
+            <table style="width:100%">
+                <tr>
+                    <th style="width:50%;">
+                            <a>Signe du Zodiaque</a>
+                            <br>
+                            <div id="signeZod"></div>
+                    </th>
+                    <th>
+                            <a>Signe astrologique chinois</a>
+                            <br>
+                            <div id="signeChinois"></div>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width:50%;">
+                        <a>Couleur porte-bonheur</a>
+                        <br>
+                        <div id="couleur"></div>
+                    </th>
+                    <th style="width:50%;">
+                        <a>Animal totem</a>
+                        <br>
+                        <div id="animal"></div>
+                    </th>
+                </tr>
+            </table>
         </div>
         
         <script>
@@ -49,8 +61,8 @@ and open the template in the editor.
                     },
                    dataType: 'json'
                 }).done(function (data) {
-                    $('#signeZod').html(data.profil.signeZod);
-                    $('#signeChinois').html(data.profil.signeChinois);
+                    $('#signeZod').append("<br><img src='Images/"+data.profil.signeZod+".png' alt='Images/Ophiuchus.png'>   "+data.profil.signeZod)
+                    $('#signeChinois').html("<br><img src='Images/"+data.profil.signeChinois+".png' alt='Images/Ophiuchus.png'>   "+data.profil.signeChinois);
                     $('#couleur').html(data.profil.couleur);
                     $('#animal').html(data.profil.animal);
                 });
