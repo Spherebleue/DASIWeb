@@ -8,36 +8,41 @@
         <link rel="stylesheet" href="newCascadeStyleSheet.css">
     </head>
     <body>
-        <div id="gauche">
-            <h1>Connexion</h1>
-
-            <input type ="email" id='champ-login' placeholder="adresse mail"> <br>
-            <input type="password" id="champ-password" placeholder="mot de passe"> <br>
-            <button id="bouton-connexion">Se connecter</button>   
-            <div id="message"></div>
+        <table style="width:100%;height:100%;">
+            <tr>
+                <th style="width:50%;height:100%;vertical-align:top;">
+                    <div id="gauche" >
+                        <h1>S'identifier</h1>
+                        <input type ="email" id='champ-login' placeholder="adresse mail"> 
+                        <br></br>
+                        <input type="password" id="champ-password" placeholder="mot de passe"> 
+                        <br></br>
+                        <button id="bouton-connexion">Se connecter</button>   
+                        <div id="message"></div>
+                    </div>
+                </th>
+                <th style="width:50%;height:100%;vertical-align:top;">
+                    <div id="droite">
+                        <h1>Créer un compte</h1>
+                        <input type="radio" name="sexe" value="Homme" id="Homme" /> <label for="Homme">Homme</label>
+                        <input type="radio" name="sexe" value="Femme" id="Femme" /> <label for="Femme">Femme</label>
+                        <input type="radio" name="sexe" value="Autre" id="Autre" /> <label for="Autre">Autre</label><br></br>
+                        <input type="text" name="Nom" id="Nom" placeholder="Nom"/><br></br>
+                        <input type="text" name="Prenom" id="Prenom" placeholder="Prénom"/><br></br>
+                        <input type ="email" id='new-champ-login' placeholder="adresse mail"> <br></br>
+                        <input type ="email" id='new-champ-login-conf' placeholder="confirmer l'adresse mail"> <br></br>
+                        <input type="password" id="new-champ-password" placeholder="mot de passe"> <br></br>
+                        <input type="password" id="new-champ-password-conf" placeholder="confirmer le mot de passe"> <br></br>
+                        <input type="date" id='date-inscription'/><br></br>
+                        <button id="bouton-inscription">S'inscrire</button>   
+                        <div id="messageInscription"></div>
+                    </div>
+                </th>
+            </tr>
+        </table>
         
-        </div>
-        <div id="droite">
-            <h1> Inscription</h1>
-            <input type="radio" name="sexe" value="Homme" id="Homme" /> <label for="Homme">Homme</label>
-            <input type="radio" name="sexe" value="Femme" id="Femme" /> <label for="Femme">Femme</label>
-            <input type="radio" name="sexe" value="Autre" id="Autre" /> <label for="Autre">Autre</label><br />
-           
-            <input type="text" name="Nom" id="Nom" placeholder="Nom"/><br>
-            <input type="text" name="Prenom" id="Prenom" placeholder="Prénom"/><br>
-            <input type ="email" id='new-champ-login' placeholder="adresse mail"> <br>
-            <input type ="email" id='new-champ-login-conf' placeholder="confirmer l'adresse mail"> <br>
-            <input type="password" id="new-champ-password" placeholder="mot de passe"> <br>
-            <input type="password" id="new-champ-password-conf" placeholder="confirmer le mot de passe"> <br>
-            <input type="date" id='date-inscription'/><br>
-            <button id="bouton-inscription">S'inscrire</button>   
-            <div id="messageInscription"></div>
-
-       <br />
-        </div>
         <script>
              
-            
             function connexion() {
                 $('#message').html('Connexion en cours');
                 document.getElementById("bouton-connexion").disabled = true;

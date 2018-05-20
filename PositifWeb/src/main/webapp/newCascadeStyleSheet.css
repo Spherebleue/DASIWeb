@@ -8,23 +8,40 @@ and open the template in the editor.
     Author     : mduraffour
 */
 
+html{
+    height: 100vh;
+}
+
+br{
+    
+}
+
 body
 {
-background-image: url("le-jeu.png");
+background-color: lightgrey;
 background-repeat: no-repeat;
-width: 700px;
-height: 500px;
 font-family: "Trebuchet MS";
 font-size: 20px;
+height:80vh;
 }
 
 #gauche{
-float: left;
+width:100%;
+height:100%;
+border-right-style: solid;
+border-right-color: darkblue;
 }
+
 #droite{
-float: right;
+width:100%;
+height:100%;
 }
+
 #retour{
     font-size: 10px;
     float: left
+}
+
+input{
+    border-radius: 5px;
 }
