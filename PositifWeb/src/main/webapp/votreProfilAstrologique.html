@@ -28,11 +28,13 @@ and open the template in the editor.
                             <a>Signe du Zodiaque</a>
                             <br>
                             <div id="signeZod"></div>
+                            <br>
                     </th>
                     <th>
                             <a>Signe astrologique chinois</a>
                             <br>
                             <div id="signeChinois"></div>
+                            <br>
                     </th>
                 </tr>
                 <tr>
@@ -61,10 +63,14 @@ and open the template in the editor.
                     },
                    dataType: 'json'
                 }).done(function (data) {
-                    $('#signeZod').append("<br><img src='Images/"+data.profil.signeZod+".png' alt='Images/Ophiuchus.png'>   "+data.profil.signeZod)
-                    $('#signeChinois').html("<br><img src='Images/"+data.profil.signeChinois+".png' alt='Images/Ophiuchus.png'>   "+data.profil.signeChinois);
-                    $('#couleur').html(data.profil.couleur);
-                    $('#animal').html(data.profil.animal);
+                    $('#signeZod').append("\<br>\n\<object data='Images/"+data.profil.signeZod+
+            ".png' type='image/png'><img src='Images/Blobfish.jpg' /></object>"+data.profil.signeZod);
+                    $('#signeChinois').html("\<br>\n\<object data='Images/"+data.profil.signeChinois+
+            ".png' type='image/png'><img src='Images/Blobfish.jpg' /></object>"+data.profil.signeChinois);
+                    $('#couleur').html("\<br>\n\<object data='Images/"+data.profil.couleur.split(" ")[0]+
+                            ".jpg' type='image/png'><img src='Images/Blobfish.jpg' /></object>"+data.profil.couleur);
+                    $('#animal').html("\<br>\n\<object data='Images/"+data.profil.animal+
+                            ".jpg' type='image/png'><img src='Images/Blobfish.jpg' /></object>"+data.profil.animal);
                 });
                 
              });
