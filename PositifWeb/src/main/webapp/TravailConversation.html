@@ -16,11 +16,13 @@ and open the template in the editor.
         <div id="retour">
         <input type="button" value="Retour Menu" OnClick="javascript:location.href='MenuEmp.html'">
         </div>
+        
         <div id = intro></div>
+        
         <table style="width:100%">
             <tr>
                 <th style="width:50%">
-                    <table id="AttributClient" style="border: solid">
+                    <table id="AttributClient">
                         <tr>
                             <th style="width:50%">
                                 Attribut
@@ -78,7 +80,7 @@ and open the template in the editor.
                                 </th>
                             </tr>
                         </table>
-                            <input type="button" id ="bouton-predictions" value="Prédictions" disabled>
+                            <input type="button" id ="bouton-predictions" value="Prédictions" style="width:100%; background-color:grey" disabled>
                     </div>
                 </th>
             </tr>
@@ -90,15 +92,16 @@ and open the template in the editor.
                     <div id="InfoDetaille"> fdhdwjdwgtj</div>
                 </th>
             </tr>
-        </table> 
-        
-        <table   style="width:100%">
-            <th style="width:50%">
-                <input style="width:100%" type="button" id ="bouton_commencer" value="Commencer" onclick="commencer()">
-            </th>
-            <th style="width:50%">
-                <input style="width:100%" type="button" id ="bouton_terminer" value="Terminer" onclick="terminer()" disabled >
-            </th>
+        </table>
+        <table style="width:100%">
+            <tr>
+                <th style="width:85%">
+                    <input style="width:100%" type="button" id ="bouton_commencer" value="Commencer" onclick="commencer()">
+                </th>
+                <th style="width:15%">
+                    <input style="width:100%" type="button" id ="bouton_terminer" value="Terminer" onclick="terminer()" disabled >
+                </th>
+            </tr>
         </table>
         
         <script>
@@ -117,8 +120,8 @@ and open the template in the editor.
                     var newLink = document.getElementById('AttributClient');
                     for (var iter = 0; iter < data.listeProprieteClt.length; iter++) {
                         var row = document.createElement('tr');
-                        var tup1 = document.createElement('th');
-                        var tup2 = document.createElement('th');
+                        var tup1 = document.createElement('td');
+                        var tup2 = document.createElement('td');
                         var txt1 = document.createTextNode(data.listeProprieteClt[iter].nom);
                         var txt2 = document.createTextNode(data.listeProprieteClt[iter].valeur);
                         tup1.appendChild(txt1);

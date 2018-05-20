@@ -28,13 +28,6 @@ border-right-style: solid;
 border-right-color: darkblue;
 }
 
-#parti{
-    font-size: 30px;
-    margin: 16px 2px;
-    padding: 10px 30px;
-    border-radius: 3px;
-}
-
 #droite{
 width:100%;
 height:100%;
@@ -46,7 +39,6 @@ height:100%;
 }
 
 #message{
-    position:fixed; 
     width:100%;
     text-align:center;
 }
@@ -66,4 +58,48 @@ input{
 input[type="button"]{
     border-radius: 3px;
     padding: 4px;
+}
+
+#parti{
+    font-size: 30px;
+    margin: 16px 2px;
+    padding: 10px 30px;
+    border-radius: 3px;
+}
+
+#TravaillerME{
+    font-size: 30px;
+    margin: 16px 2px;
+    padding: 5px 100px;
+    border-radius: 3px;
+}
+
+#bouton_commencer{
+    font-size: 30px;
+    margin: 16px 2px;
+    padding: 5px 100px;
+    border-radius: 3px;
+}
+
+#bouton_terminer{
+    font-size: 30px;
+    margin: 16px 2px;
+    padding: 5px 100px;
+    border-radius: 3px;
+}
+
+#AttributClient{
+    border-collapse: collapse;
+    border: 1px solid;
+}
+
+#AttributClient td, #AttributClient th {
+    border: 1px solid;
+    padding: 2px;
+}
+
+#AttributClient tr:hover {background-color: #cccccc;}
+
+#AttributClient th {
+    background-color: grey;
 }

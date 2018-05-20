@@ -8,10 +8,10 @@ and open the template in the editor.
     <head>
         <title>Employe POSITIF - Menu</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="newCascadeStyleSheet.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="newCascadeStyleSheet.css">
          <style type="text/css">
             h1 { text-align: center; }
             .highcharts-container {
@@ -23,20 +23,24 @@ and open the template in the editor.
     <body>
         <input type="button" value="Déconnexion" onclick="javascript:location.href='AccueilEmp.html'">
          
-        <div id="message">Bonjour [Prénom] ! Que souhaitez vous faire ?</div>
-         
-        <h1> Tableau de bord </h1>
-         <table style="width:100%">
+        <div style="text-align: center; margin: 0 auto"> <h1> Tableau de bord </h1></div>
+        <table style="width:100%;height:100%">
             <tr>
-                <th style="width:33%"><div id="VoyParMedium" class="highcharts-container"> </div></th>
-                <th style="width:33%"><div id="VoyParEmp" class="highcharts-container"> </div></th>
-                <th style="width:33%"><div id="PourcVoyance" class="highcharts-container"> </div></th>
+                <th style="width:33%;height: 100%"><div id="VoyParMedium" class="highcharts-container"> </div></th>
+                <th style="width:33%;height: 100%"><div id="VoyParEmp" class="highcharts-container"> </div></th>
+                <th style="width:33%;height: 100%"><div id="PourcVoyance" class="highcharts-container"> </div></th>
+            </tr>
+            <tr>
+                <th style="width:33%;height: 100%"><div>Voyance par médium</div></th>
+                <th style="width:33%;height: 100%"><div>Voyance par employé</div></th>
+                <th style="width:33%;height: 100%"><div>Pourcentage de voyance par employé</div></th>
             </tr>
         </table> 
         
         <br>
-        <input type="button" value="Travailler" onclick="javascript:location.href='Travailler.html'">
-        
+        <div style="text-align: center; margin: 0 auto">
+            <input type="button" id="TravaillerME" value="Travailler" onclick="javascript:location.href='Travailler.html'">
+        </div>
         
         <script type="text/javascript">
        
@@ -70,7 +74,7 @@ and open the template in the editor.
                         lineChartData.labels.push(data.duosHisto[iter].Nom);
                         lineChartData.data.push(data.duosHisto[iter].Valeur);    
                     }
-                    buildBarChart('VoyParMedium', lineChartData, "Voyance par médium");
+                    buildBarChart('VoyParMedium', lineChartData);
                 });
             }
             
@@ -92,7 +96,7 @@ and open the template in the editor.
                         lineChartData.labels.push(data.duosHisto[iter].Nom);
                         lineChartData.data.push(data.duosHisto[iter].Valeur);    
                     }
-                    buildBarChart('VoyParEmp', lineChartData, "Voyance par employé");
+                    buildBarChart('VoyParEmp', lineChartData);
                 });
             }
             
@@ -125,22 +129,6 @@ and open the template in the editor.
                 });
             }
             
-            function AfficherNom()
-            {
-                $.ajax({
-                    url: './ActionServlet',
-                    method: 'POST',
-                    data: {
-                        action: 'afficherNom'
-                    },
-                   dataType: 'json'
-                }).done(function (data) {
-                    var prenom = data.personne.prenom;
-                    $('#message').html('Bonjour '+prenom+' ! Que souhaitez vous faire ?');
-                });
-            }
-            
-            
             $(document).ready(function () {
                 
                 VoyParMedium();
@@ -154,13 +142,9 @@ and open the template in the editor.
                     deconnexion();
                     window.location='AcceuilEmp.html';
                 });
-                
-                AfficherNom();
             });
             
-            
-            
-            function buildBarChart(container, graphData, titre) {
+            function buildBarChart(container, graphData) {
 
                 Highcharts.chart(container, {
 
@@ -168,8 +152,7 @@ and open the template in the editor.
                         type: 'column'
                     },
                     title: {
-                        text: titre,
-                        verticalAlign: "bottom"
+                        text:''
                     },
                     subtitle: {
                         text: 'Source: PositIF'
@@ -200,8 +183,7 @@ and open the template in the editor.
                         type: 'pie'
                     },
                     title: {
-                        text: "Pourcentage de voyance par employé",
-                        verticalAlign: "bottom"
+                        text:''
                     },
                     subtitle: {
                         text: 'Source: PositIF'
