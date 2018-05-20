@@ -17,27 +17,32 @@ and open the template in the editor.
         <input type="button" value="Retour Menu" OnClick="javascript:location.href='menuClient.html'">
         </div>
         <br>
-        <div>
+        <div style="text-align: center">
             <h1>
               Quel voyant souhaitez-vous consulter ?
             </h1>
         </div>
-        <table style="width:75%">
+        <table style="width:100%; height:80%">
             <tr>
-                <th style="text-align: left; width:40%" > 
-                    <div id="gauche"> 
-                        <select id="list_medium" name="select2"  ></select>
+                <th style="width:50%;">
+                    <div id="liste" style="height:100%">
+                       <select id="list_medium" name="select2" style="height:100%">
+
+                        </select>
                     </div>
                 </th>
-                <th style="text-align: left; width:60%">
-                    <div id="droite"> </div>
+                <th style="width:50%;height:100%">
+                    <div id = "bio" >
+                            Cliquez sur le nom d'un médium, et les informations détaillées à son sujet s'afficheront ici.
+                    </div>
                 </th>
-            </tr>
-        </table> 
+        </table>
+        <br>
+        <div style="text-align: center; margin: 0 auto">
+            <input type="button" id="parti" value="C'est parti !" disabled>
+        </div>
        
-        <input type="button" id="parti" value="C'est parti !" disabled>
-       
-         <script>
+        <script>
            $(document).ready(function () {
                 $.ajax({
                     url: './ActionServlet',
@@ -148,7 +153,7 @@ and open the template in the editor.
                     },
                    dataType: 'json'
                 }).done(function (data) {
-                    var Parabio = document.getElementById('droite');
+                    var Parabio = document.getElementById('bio');
                     
                     while (Parabio.firstChild) {
                         Parabio.removeChild(Parabio.firstChild);
@@ -157,7 +162,7 @@ and open the template in the editor.
                     
                     //affiche le nom
                     var espaceNom = document.createElement('a');
-                    var nom=data.mediumS.Nom;
+                    var nom="Nom : "+data.mediumS.Nom;
                     var newLinkText = document.createTextNode(nom+'\n');
                     espaceNom.appendChild(newLinkText);
                     espaceMessage.appendChild(espaceNom);
@@ -165,7 +170,7 @@ and open the template in the editor.
                     
                     //affiche la bio
                     var espaceBio = document.createElement('a');
-                    var bio=data.mediumS.Bio;
+                    var bio="Biographie : "+ data.mediumS.Bio;
                     var newLinkText2 = document.createTextNode(bio);
                     espaceBio.appendChild(newLinkText2);
                     espaceMessage.appendChild(espaceBio);
@@ -174,17 +179,17 @@ and open the template in the editor.
                     //affiche la spécialité
                     var espaceSpecialite = document.createElement('a');
                     var Specialite=data.mediumS.Specialite;
-                    var newLinkText = document.createTextNode(Specialite);
+                    var newLinkText = document.createTextNode("Spécialite : " +Specialite);
                     espaceSpecialite.appendChild(newLinkText);
                     espaceMessage.appendChild(espaceSpecialite);
                     espaceMessage.appendChild(document.createElement('br'));
                     
                      //affiche les caracteristiques de la spécialité
-                    if(Specialite== "Astrologue")
+                    if(Specialite==="Astrologue")
                     {
                        //Affiche l'ecole
                         var espaceEcole = document.createElement('a');
-                        var Ecole=data.mediumS.Ecole;
+                        var Ecole="Ecole : "+data.mediumS.Ecole;
                         var newLinkText = document.createTextNode(Ecole);
                         espaceEcole.appendChild(newLinkText);
                         espaceMessage.appendChild(espaceEcole);
@@ -192,17 +197,17 @@ and open the template in the editor.
                         
                         //Affiche la promotion
                         var espacePromotion = document.createElement('a');
-                        var Promotion=data.mediumS.Promotion;
+                        var Promotion="Promotion : "+data.mediumS.Promotion;
                         var newLinkText = document.createTextNode(Promotion);
                         espacePromotion.appendChild(newLinkText);
                         espaceMessage.appendChild(espacePromotion);
                         espaceMessage.appendChild(document.createElement('br'));
                         
-                    }else if(Specialite=="Tarologue"){
+                    }else if(Specialite==="Tarologue"){
                         
                         //Affiche les cartes
                         var espaceCartes = document.createElement('a');
-                        var Cartes=data.mediumS.Cartes;
+                        var Cartes="Cartes utilisées : "+data.mediumS.Cartes;
                         var newLinkText = document.createTextNode(Cartes);
                         espaceCartes.appendChild(newLinkText);
                         espaceMessage.appendChild(espaceCartes);
@@ -212,7 +217,7 @@ and open the template in the editor.
                         
                         //Affiche le Support
                         var espaceSupport = document.createElement('a');
-                        var Support=data.mediumS.Support;
+                        var Support="Support utilisé : "+data.mediumS.Support;
                         var newLinkText = document.createTextNode(Support);
                         espaceSupport.appendChild(newLinkText);
                         espaceMessage.appendChild(espaceSupport);
