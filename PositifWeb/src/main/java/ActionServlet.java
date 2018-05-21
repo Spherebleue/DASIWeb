@@ -143,6 +143,15 @@ public class ActionServlet extends HttpServlet {
                     response.setStatus(403);
                 }   
                 break;
+	    case "terminerVoyanceClient":
+-                action = new ActionTerminerVoyanceClient();
+-                action.execute(request);
+-                try (PrintWriter out = response.getWriter()) {
+-                    PrintString PS= new PrintString();
+-                        PS.execute(out,"TerminerVoyanceTermine");
+-                }  
+-                response.setStatus(200);
+-                break;
             case "sInscrireClient":
                 action = new ActionInscriptionClient();
                 action.execute(request);
