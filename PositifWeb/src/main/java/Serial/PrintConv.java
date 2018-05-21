@@ -38,5 +38,9 @@ public class PrintConv {
         } else {
             jsonConv.addProperty("Specialité", "Voyant");
         }
+        
+        JsonObject container = new JsonObject();
+        container.add("conv",jsonConv);
+        out.println(gson.toJson(container));
     }
 }
