@@ -14,10 +14,12 @@ import Action.ActionDemanderVoyance;
 import Action.ActionInscriptionClient;
 import Action.ActionListerTousMediums;
 import Action.ActionObtenirBio;
+import Action.ActionObtenirHistoClient;
 import Action.ActionParEmp;
 import Action.ActionPourcVoyance;
 import Action.ActionPredire;
 import Action.ActionTerminerVoyance;
+import Action.ActionTerminerVoyanceClient;
 import Action.ActionVoyParMedium;
 import Serial.PrintBio;
 import Serial.PrintClient;
@@ -212,6 +214,10 @@ public class ActionServlet extends HttpServlet {
                 }       
                 response.setStatus(200);
                 break;
+                case "ObtenirHistoriqueClient" :
+                action= new ActionObtenirHistoClient();
+                action.execute(request);
+                break;
             case "afficherProfil":
                 action = new ActionAfficherProfil();
                 action.execute(request);
@@ -287,6 +293,15 @@ public class ActionServlet extends HttpServlet {
                     }
                 }
                 break;
+            case "terminerVoyanceClient":
+                action = new ActionTerminerVoyanceClient();
+                action.execute(request);
+                try (PrintWriter out = response.getWriter()) {
+                    PrintString PS= new PrintString();
+                        PS.execute(out,"TerminerVoyanceTermine");
+                }  
+                response.setStatus(200);
+                break;
             case "terminerVoyance":
                 action = new ActionTerminerVoyance();
                 action.execute(request);
@@ -341,14 +356,6 @@ public class ActionServlet extends HttpServlet {
                 }  
                 break;
             default:
-                break;
-	    case "ObtenirTousConv":
-                action = new ActionObtenirConv();
-                action.execute(request);
-                try (PrintWriter out = response.getWriter()) {
-                    PrintListeConv PLC= new PrintListeConv();
-                    PLC.execute(out, (List<Conversation>)request.getAttribute("histo)"));
-                }  
                 break;
         }  
         

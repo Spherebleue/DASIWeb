@@ -21,7 +21,6 @@ public class ActionAccepterVoyance extends Action {
     public void execute(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Conversation conv = (Conversation) session.getAttribute("Conversation");
-        System.out.println(conv.getClient().getAnimalTotem());
         Services.AccepterVoyance(conv);
     }
     

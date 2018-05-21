@@ -115,32 +115,14 @@ and open the template in the editor.
                     url: './ActionServlet',
                     method: 'POST',
                     data: {
-                        action: 'terminerVoyance'
+                        action: 'terminerVoyanceClient'
                     },
                    dataType: 'json'
                 }).done(function (data) {
                     
                 });
             }
-            
-            var idAttente = setInterval(attenteConvTerminee(), 3000);
-            
-            function attenteConvTerminee()
-            {
-                $.ajax({
-                    url: './ActionServlet',
-                    method: 'POST',
-                    data: {
-                        action: 'conversationTerminee'
-                    },
-                   dataType: 'json'
-                }).done(function (data) {
-                    terminerVoyance();
-                }).fail(function(){
-                    
-                });
-            }
-            
+                                 
             function chargerBio(nomMedium)
             {
               

@@ -12,17 +12,21 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Spherebleue
+ * @author moi
  */
-public class ActionTerminerVoyance extends Action{
-
+public class ActionTerminerVoyanceClient extends Action{
     @Override
     public void execute(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Conversation conv = (Conversation) session.getAttribute("Conversation");
-       
-       Services.TerminerVoyance(conv);
-      
+        
+        if(Services.EstTerminee(conv)){
+        } else {
+            Services.TerminerVoyance(conv);
+        }
+        
+        session.removeAttribute("Conversation");
+        request.removeAttribute("Conversation");
     }
     
 }
