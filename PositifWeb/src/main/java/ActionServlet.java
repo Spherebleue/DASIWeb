@@ -372,9 +372,15 @@ public class ActionServlet extends HttpServlet {
             case "ObtenirConv":
                 action = new ActionObtenirConvDansListe();
                 action.execute(request);
-                try (PrintWriter out = response.getWriter()) {
+                boolean reussi2 = (boolean) request.getAttribute("reussi");
+                if(reussi2){
+                    try (PrintWriter out = response.getWriter()) {
                     PrintConv PC= new PrintConv();
                     PC.execute(out, (Conversation)request.getAttribute("Conv"));
+                } 
+                }else
+                {
+                    response.setStatus(403);
                 }
                 break;
             default:
