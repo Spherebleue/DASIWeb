@@ -9,58 +9,128 @@ and open the template in the editor.
        <title>POSITIF - L'historique de vos demandes</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="newCascadeStyleSheet.css">
-
+        <link rel="stylesheet" href="newCascadeStyleSheet.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ 
     </head>
     <body>
         <div id="retour">
         <input type="button" value="Retour Menu" OnClick="javascript:location.href='menuClient.html'">
         </div>
         <br>
-        <div>
+        <div style="text-align:center;">
             <h1>
-                Voici vos dernières demandes
+               Voici vos dernières demandes
             </h1>
         </div>
-        <div id="gauche"> liste des demandes</div>
-        <div id="droite"> info detaillées de la demande</div>
-        
+        <table style="width:100%; height:80%">
+            <tr>
+                <th style="width:50%;">
+                    <div id="liste" style="height:100%">
+                       <select id="list_conv" name="select2" style="height:100%">
+
+                        </select>
+                    </div>
+                </th>
+                <th style="width:50%;height:100%">
+                    <div id = "bio" >
+                            Cliquez sur une conversation, et les informations détaillées à son sujet s'afficheront ici.
+                    </div>
+                </th>
+        </table>
         <script>
-             $(document).ready(function () {
+            $(document).ready(function () {
                 
+
                 $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
                     data: {
-                        action: 'ObtenirHistoriqueClient'
+                        action: 'ObtenirTousConv'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    var newLink = document.getElementById('list_conv');
+                    newLink.size=data.liste.length+1;
+                    
+                    for (var iter = 0; iter < data.liste.length; iter++) {
+                        var opt = document.createElement('option');
+                        var newLinkText = document.createTextNode(data.liste[iter].id+' : avec '+data.liste[iter].NomMedium+" le "+data.liste[iter].DateDebut);
+                        opt.appendChild(newLinkText);
+                        newLink.appendChild(opt);
+                    }
+                }).fail(function(){
+                    $('#message').html("Vous n'avez fait aucune demande");
+                });
+            });
+            
+            
+            $('#list_conv').change(function(){
+                var newLink = document.getElementById('bio');
+                var list_med = document.getElementById('list_conv');
+                 
+                var choice = list_med.selectedIndex;  // Récupération de l'index du <option> choisi
+                var valeur_cherchee = list_med.options[choice].value;
+                // newLink.textContent=valeur_cherchee;
+                chargerConv(valeur_cherchee);
+                
+            }); 
+            
+            function chargerConv(idConv)
+            {
+              
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'ObtenirConv',
+                        idConv:idConv
                     },
                    dataType: 'json'
                 }).done(function (data) {
                     
-                    var newLink = document.getElementById('list_medium');
-                    newLink.size=data.liste.length+1;
+                    var Parabio = document.getElementById('bio');
                     
-                    
-                    //CHANGER NOM POUR DATA.TRUC.BIDULE
-                    var opt = document.createElement('option');
-                    var newLinkText = document.createTextNode(data.mediumJour.Nom);
-                    opt.appendChild(newLinkText);
-                    newLink.appendChild(opt);
-
-                    for (var iter = 0; iter < data.liste.length; iter++) {
-                        var opt = document.createElement('option');
-                        var newLinkText = document.createTextNode(data.liste[iter].Nom, data.liste[iter].Specialite);
-                        opt.appendChild(newLinkText);
-                        newLink.appendChild(opt);
+                    while (Parabio.firstChild) {
+                        Parabio.removeChild(Parabio.firstChild);
                     }
-
-                }).fail(function(){
-                    $('#message').html('Aucun voyant n\'est disponible aujourd\'hui');
+                    var espaceMessage = document.createElement('p');
+                    
+                    //affiche l'heure de debut
+                    var espaceNom = document.createElement('a');
+                    var nom="Heure de début  : "+data.conv.HeureDebut;
+                    var newLinkText = document.createTextNode(nom+'\n');
+                    espaceNom.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceNom);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche l'heure de fin
+                    var espaceBio = document.createElement('a');
+                    var bio="Heure de fin : "+ data.conv.HeureFin;
+                    var newLinkText2 = document.createTextNode(bio);
+                    espaceBio.appendChild(newLinkText2);
+                    espaceMessage.appendChild(espaceBio);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche le nom du medium
+                    var espaceSpecialite = document.createElement('a');
+                    var newLinkText = document.createTextNode("Nom du médium : " +data.conv.NomMedium);
+                    espaceSpecialite.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceSpecialite);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche la spécialité
+                    var espaceSpecialite = document.createElement('a');
+                    var Specialite=data.conv.Specialite;
+                    var newLinkText = document.createTextNode("Spécialité : " +Specialite);
+                    espaceSpecialite.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceSpecialite);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    Parabio.appendChild(espaceMessage);
+                    
                 });
-            });
+            }
         </script>
-        
-        
-        
     </body>
 </html>
