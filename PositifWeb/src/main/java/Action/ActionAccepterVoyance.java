@@ -7,6 +7,7 @@ package Action;
 
 import fr.insalyon.dasi.positif.metier.Conversation;
 import fr.insalyon.dasi.positif.service.Services;
+import static java.lang.System.out;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +21,7 @@ public class ActionAccepterVoyance extends Action {
     public void execute(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Conversation conv = (Conversation) session.getAttribute("Conversation");
+        System.out.println(conv.getClient().getAnimalTotem());
         Services.AccepterVoyance(conv);
     }
     

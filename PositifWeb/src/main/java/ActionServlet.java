@@ -17,6 +17,7 @@ import Action.ActionObtenirBio;
 import Action.ActionObtenirHistoClient;
 import Action.ActionParEmp;
 import Action.ActionPourcVoyance;
+import Action.ActionPredire;
 import Action.ActionTerminerVoyance;
 import Action.ActionVoyParMedium;
 import Serial.PrintBio;
@@ -26,6 +27,7 @@ import Serial.PrintHashMapStrInt;
 import Serial.PrintListMediums;
 import Serial.PrintMedium;
 import Serial.PrintPersonne;
+import Serial.PrintPredictions;
 import Serial.PrintString;
 import Serial.PrintProfil;
 import fr.insalyon.dasi.positif.dao.JpaUtil;
@@ -252,13 +254,14 @@ public class ActionServlet extends HttpServlet {
 		    response.setStatus(200);
                 }    
 	        response.setStatus(200);
+                break;
             case "demandeAttributClient":
                 action = new ActionDemanderAttributClient();
                 action.execute(request);
                 try (PrintWriter out = response.getWriter()) {
                     PrintClient PC = new PrintClient();
-                    Client clt = (Client)request.getAttribute ("Client");
-                    PC.execute(out, clt);
+                    Conversation conv = (Conversation)request.getAttribute ("Conversation");
+                    PC.execute(out, conv);
                 }  
                 response.setStatus(200);
                 break;
@@ -315,6 +318,17 @@ public class ActionServlet extends HttpServlet {
                     PS.execute(out,"CommenterVoyanceTermine");
                 }  
                 response.setStatus(200);
+                break;
+            case "predire":
+                action = new ActionPredire();
+                action.execute(request);
+                try (PrintWriter out = response.getWriter()) {
+                    PrintPredictions PP= new PrintPredictions();
+                    List <String> liste_predictions =(List <String>)request.getAttribute("Liste_Predictions");
+                    PP.execute(out,liste_predictions);
+                }  
+                response.setStatus(200);
+                break;
             case "conversationTerminee":
                 action = new ActionConversationTerminee();
                 action.execute(request);

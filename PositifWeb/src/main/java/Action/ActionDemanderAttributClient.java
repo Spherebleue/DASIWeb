@@ -22,6 +22,7 @@ public class ActionDemanderAttributClient extends Action {
         Conversation conv = (Conversation) session.getAttribute("Conversation");
         Client clt = conv.getClient();
         request.setAttribute("Client",clt);
+        request.setAttribute("Conversation", conv);
     }
     
 }

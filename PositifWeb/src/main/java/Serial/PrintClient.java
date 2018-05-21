@@ -11,6 +11,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.insalyon.dasi.positif.metier.Astrologue;
 import fr.insalyon.dasi.positif.metier.Client;
+import fr.insalyon.dasi.positif.metier.Conversation;
+import fr.insalyon.dasi.positif.metier.Medium;
 import fr.insalyon.dasi.positif.metier.Tarologue;
 import fr.insalyon.dasi.positif.metier.Voyant;
 import java.io.PrintWriter;
@@ -23,9 +25,14 @@ import java.util.Date;
  */
 public class PrintClient {
     
-    public void execute(PrintWriter out, Client clt) {
+    public void execute(PrintWriter out, Conversation conv) {
+        
+        Client clt=conv.getClient();
+        Medium medium=conv.getMedium();
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
+        JsonObject jsonConversation= new JsonObject();
         
         JsonArray jsonClient = new JsonArray();
         
@@ -75,8 +82,22 @@ public class PrintClient {
         jsonAnimal.addProperty("valeur", clt.getAnimalTotem());
         jsonClient.add(jsonAnimal);
         
+        jsonConversation.add("listeProprieteClt", jsonClient);
+        
+        JsonObject jsonMedium = new JsonObject();
+        jsonMedium.addProperty("nom", medium.getNom());
+        if(medium instanceof Astrologue){
+            jsonMedium.addProperty("Specialite", "Astrologue");
+        } else if (medium instanceof Tarologue) {
+            jsonMedium.addProperty("Specialite", "Tarologue");
+        } else {
+            jsonMedium.addProperty("Specialite", "Voyant");
+        }  
+        
+        jsonConversation.add("medium",jsonMedium);
+        
         JsonObject container = new JsonObject();
-        container.add("listeProprieteClt", jsonClient);
+        container.add("Conversation", jsonConversation);
         out.println(gson.toJson(container));
         
     }

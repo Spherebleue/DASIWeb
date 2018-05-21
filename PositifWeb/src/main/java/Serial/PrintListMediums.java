@@ -46,9 +46,6 @@ public class PrintListMediums {
             jsonMedium2.addProperty("Nom", m.getNom());
             if(m instanceof Astrologue){
                 jsonMedium2.addProperty("Specialite", "Astrologue");
-                //Astrologue astro=(Astrologue)medium;
-               // jsonMedium.addProperty("Ecole", astro.getEcole());
-               // jsonMedium.addProperty("Promotion", astro.getPromotion());
             } else if (m instanceof Tarologue) {
                 jsonMedium2.addProperty("Specialite", "Tarologue");
             } else {
