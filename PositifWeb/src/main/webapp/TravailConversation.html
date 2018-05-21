@@ -18,7 +18,6 @@ and open the template in the editor.
         </div>
         
         <div id = intro></div>
-        <div id = test></div>
         
         <table style="width:100%">
             <tr>
@@ -86,11 +85,17 @@ and open the template in the editor.
                 </th>
             </tr>
             <tr>
-                <th style="width:50%">
-                    <div id="demandeClient">zqfrdsqhgqdh  </div> 
+               <th style="width:50%;">
+                    <div id="liste" style="height:100%">
+                       <select id="list_conv" name="select2" style="height:100%">
+
+                        </select>
+                    </div>
                 </th>
-                <th style="width:50%">
-                    <div id="InfoDetaille"> fdhdwjdwgtj</div>
+                <th style="width:50%;height:100%">
+                    <div id = "infoConv" >
+                            Cliquez sur une conversation, et les informations détaillées à son sujet s'afficheront ici.
+                    </div>
                 </th>
             </tr>
         </table>
@@ -131,7 +136,13 @@ and open the template in the editor.
                         row.appendChild(tup2);
                         newLink.appendChild(row);
                     }
-                    var introduction=data.Conversation.listeProprieteClt[3].valeur+". "+data.Conversation.listeProprieteClt[1].valeur+" "+data.Conversation.listeProprieteClt[2].valeur+" demande une voyance par "+data.Conversation.medium.nom+", "+data.Conversation.medium.Specialite;
+                    var introduction;
+                    if(data.Conversation.listeProprieteClt[3].valeur=="F"){
+                        introduction="Mme. ";
+                    }else if(data.Conversation.listeProprieteClt[3].valeur=="M"){
+                        introduction="M. ";
+                    }else {introduction="La personne "}
+                   introduction +=data.Conversation.listeProprieteClt[1].valeur+" "+data.Conversation.listeProprieteClt[2].valeur+" demande une voyance par "+data.Conversation.medium.nom+", "+data.Conversation.medium.Specialite;
                         var espaceIntro = document.getElementById('intro');
                          var par = document.createElement('p');
                         var stringIntro = document.createTextNode(introduction);
@@ -142,9 +153,117 @@ and open the template in the editor.
             
             $(document).ready(function () {
                attributClient(); 
+               chargerListeConv();
                attenteConvTerminee();
                document.getElementById("bouton_terminer").disabled = true;
             });
+            
+            function chargerListeConv(){
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'ObtenirTousConv',
+                        qui:'Employe'
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    var newLink = document.getElementById('list_conv');
+                    
+                    if(!data.nonVide){
+                         $('#message').html("Vous n'avez fait aucune demande");
+                         newLink.size=1;
+                    }else {
+                        if(data.liste.length+1>10){
+                             newLink.size=20;
+                        }else{
+                            newLink.size=data.liste.length+1;
+                        }
+
+                        for (var iter = 0; iter < data.liste.length; iter++) {
+                            var opt = document.createElement('option');
+                        var newLinkText = document.createTextNode(data.liste[iter].id+' : avec '+data.liste[iter].NomMedium+" le "+data.liste[iter].DateDebut);
+                            opt.appendChild(newLinkText);
+                            newLink.appendChild(opt);
+                        }
+                    }
+                }).fail(function(){
+                    $('#message').html("Vous n'avez fait aucune demande");
+                });
+            }
+            
+            $('#list_conv').change(function(){
+                var choice = list_conv.selectedIndex;  // Récupération de l'index du <option> choisi
+                var valeur_cherchee = list_conv.options[choice].value;
+                // newLink.textContent=valeur_cherchee;
+                chargerConv(valeur_cherchee);
+                
+            }); 
+            
+            function chargerConv(idConv)
+            {
+              
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'ObtenirConv',
+                        idConv:idConv,
+                        qui:'Employe'
+                        
+                    },
+                   dataType: 'json'
+                }).done(function (data) {
+                    
+                    var Parabio = document.getElementById('infoConv');
+                    
+                    while (Parabio.firstChild) {
+                        Parabio.removeChild(Parabio.firstChild);
+                    }
+                    var espaceMessage = document.createElement('p');
+                    
+                    //affiche l'heure de debut
+                    var espaceNom = document.createElement('a');
+                    var nom="Heure de début  : "+data.conv.HeureDebut;
+                    var newLinkText = document.createTextNode(nom+'\n');
+                    espaceNom.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceNom);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche l'heure de fin
+                    var espaceBio = document.createElement('a');
+                    var bio="Heure de fin : "+ data.conv.HeureFin;
+                    var newLinkText2 = document.createTextNode(bio);
+                    espaceBio.appendChild(newLinkText2);
+                    espaceMessage.appendChild(espaceBio);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche le nom du medium
+                    var espaceSpecialite = document.createElement('a');
+                    var newLinkText = document.createTextNode("Nom du médium : " +data.conv.NomMedium);
+                    espaceSpecialite.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceSpecialite);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    //affiche la spécialité
+                    var espaceSpecialite = document.createElement('a');
+                    var Specialite=data.conv.Specialite;
+                    var newLinkText = document.createTextNode("Spécialité : " +Specialite);
+                    espaceSpecialite.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceSpecialite);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    var espaceCommentaire = document.createElement('p');
+                    var Commentaire=data.conv.Commentaire;
+                    var newLinkText = document.createTextNode("Commentaire : " +Commentaire);
+                    espaceCommentaire.appendChild(newLinkText);
+                    espaceMessage.appendChild(espaceCommentaire);
+                    espaceMessage.appendChild(document.createElement('br'));
+                    
+                    Parabio.appendChild(espaceMessage);
+                    
+                });
+            }
             
             function attenteConvTerminee()
             {
@@ -157,20 +276,22 @@ and open the template in the editor.
                     },
                    dataType: 'json'
                 }).done(function (data) {
-                    terminer ();
+                    var prenom = data.personne.prenom;
+                    if(prenom=="true")
+                    {
+                      promptCommentaire();
+                    }else {
+                        attenteConvTerminee();
+                    }
                 }).fail(function(){
-                    
-                });
+                        alert( "Request failed: " + textStatus );
+                    });
                 
-                attenteConvTerminee
+                
                 }, 5000);
             }
             
             function commencer () {var di =document.getElementById("test");
-                  var para = document.createElement('p');
-                        var stringTest = document.createTextNode("introduction");
-                        para.appendChild(stringTest);
-                        di.appendChild(para);
                 $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
@@ -182,6 +303,7 @@ and open the template in the editor.
                     document.getElementById("bouton_terminer").disabled = false;
                     document.getElementById("bouton_commencer").disabled = true;
                 });
+
             }
             
             function promptCommentaire() {
@@ -211,9 +333,7 @@ and open the template in the editor.
                             action: 'terminerVoyance'
                         },
                        dataType: 'json'
-                    });
-                promptCommentaire();
-                
+                    });              
             }
             
             function predire() {

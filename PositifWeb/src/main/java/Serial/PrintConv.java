@@ -20,24 +20,50 @@ import java.text.SimpleDateFormat;
  * @author Spherebleue
  */
 public class PrintConv {
-    public void execute(PrintWriter out, Conversation conv) {
+    public void execute(PrintWriter out, Conversation conv, String qui) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         
         JsonObject jsonConv = new JsonObject();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String date =sdf.format(conv.getHeureDebut());
-        jsonConv.addProperty("HeureDebut",date);
-        date = sdf.format(conv.getHeureFin());
-        jsonConv.addProperty("HeureFin", date);
-        Medium m = conv.getMedium();
-        jsonConv.addProperty("NomMedium",m.getNom());
-        if(m instanceof Astrologue){
-            jsonConv.addProperty("Specialité", "Astrologue");
-        } else if (m instanceof Tarologue) {
-            jsonConv.addProperty("Specialité", "Tarologue");
-        } else {
-            jsonConv.addProperty("Specialité", "Voyant");
+         String date;
+         Medium m = conv.getMedium();
+        if(conv.getHeureDebut()!=null){
+           date =sdf.format(conv.getHeureDebut());
+            jsonConv.addProperty("HeureDebut",date);
+            if(conv.getHeureFin()!=null){
+                date = sdf.format(conv.getHeureFin());
+            }            
+            jsonConv.addProperty("HeureFin", date);
+            jsonConv.addProperty("NomMedium",m.getNom());
+             if(m instanceof Astrologue){
+                jsonConv.addProperty("Specialite", "Astrologue");
+            } else if (m instanceof Tarologue) {
+                jsonConv.addProperty("Specialite", "Tarologue");
+            } else {
+                jsonConv.addProperty("Specialite", "Voyant");
+            }
+        }else if(conv.getHeureFin()!=null){
+            date =sdf.format(conv.getHeureFin());
+            jsonConv.addProperty("HeureDebut",date);
+            jsonConv.addProperty("HeureFin", date);
+            
+            jsonConv.addProperty("NomMedium",m.getNom());
+            if(m instanceof Astrologue){
+                jsonConv.addProperty("Specialite", "Astrologue");
+            } else if (m instanceof Tarologue) {
+                jsonConv.addProperty("Specialite", "Tarologue");
+            } else {
+                jsonConv.addProperty("Specialite", "Voyant");
+            }
+        }else{
+            
         }
+        
+        if(qui.equals("Employe")){
+                      jsonConv.addProperty("Commentaire",conv.getCommentaire());
+  
+        }
+        
         
         JsonObject container = new JsonObject();
         container.add("conv",jsonConv);

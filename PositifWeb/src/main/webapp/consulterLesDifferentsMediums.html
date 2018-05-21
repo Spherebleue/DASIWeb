@@ -53,8 +53,11 @@ and open the template in the editor.
                     
                     
                     var newLink = document.getElementById('list_medium');
-                    newLink.size=data.liste.length+1;
-                    
+                        if(data.liste.length+1>40){
+                             newLink.size=40;
+                        }else{
+                            newLink.size=data.liste.length+1;
+                        }                    
                     var opt = document.createElement('option');
                     var newLinkText = document.createTextNode(data.mediumJour.Nom);
                     opt.appendChild(newLinkText);

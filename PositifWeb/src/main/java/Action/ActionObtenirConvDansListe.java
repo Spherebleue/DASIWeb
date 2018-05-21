@@ -21,12 +21,21 @@ public class ActionObtenirConvDansListe extends Action{
     @Override
     public void execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Client clt = (Client) session.getAttribute("Personne");
-        Client clt2 = Services.SeConnecter(clt.getAdresse(),clt.getMotDePasse());
+        Client clt;
+        Client clt2;
+        String qui=request.getParameter("qui");
+        
+        if(qui.equals("Client")){
+            clt = (Client) session.getAttribute("Personne");
+            clt2 = Services.SeConnecter(clt.getAdresse(),clt.getMotDePasse());
+        }else{
+            Conversation conv = (Conversation) session.getAttribute("Conversation");
+            clt2 = conv.getClient();
+        }
+        
         List<Conversation> list = clt2.getConversations();
         
         String id=(request.getParameter("idConv")).split(" ")[0];
-        
         
         Conversation cherche;
         

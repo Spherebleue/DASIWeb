@@ -37,6 +37,7 @@ and open the template in the editor.
                             Cliquez sur une conversation, et les informations détaillées à son sujet s'afficheront ici.
                     </div>
                 </th>
+            </tr>
         </table>
         <script>
             $(document).ready(function () {
@@ -46,18 +47,28 @@ and open the template in the editor.
                     url: './ActionServlet',
                     method: 'POST',
                     data: {
-                        action: 'ObtenirTousConv'
+                        action: 'ObtenirTousConv',
+                        qui:"Client"
                     },
                    dataType: 'json'
                 }).done(function (data) {
                     var newLink = document.getElementById('list_conv');
-                    newLink.size=data.liste.length+1;
                     
-                    for (var iter = 0; iter < data.liste.length; iter++) {
-                        var opt = document.createElement('option');
+                    if(!data.nonVide){
+                         $('#message').html("Vous n'avez fait aucune demande");
+                         newLink.size=1;
+                    }else {
+                        if(data.liste.length+1>20){
+                             newLink.size=20;
+                        }else{
+                            newLink.size=data.liste.length+1;
+                        }
+                        for (var iter = 0; iter < data.liste.length; iter++) {
+                            var opt = document.createElement('option');
                         var newLinkText = document.createTextNode(data.liste[iter].id+' : avec '+data.liste[iter].NomMedium+" le "+data.liste[iter].DateDebut);
-                        opt.appendChild(newLinkText);
-                        newLink.appendChild(opt);
+                            opt.appendChild(newLinkText);
+                            newLink.appendChild(opt);
+                        }
                     }
                 }).fail(function(){
                     $('#message').html("Vous n'avez fait aucune demande");
@@ -66,11 +77,8 @@ and open the template in the editor.
             
             
             $('#list_conv').change(function(){
-                var newLink = document.getElementById('bio');
-                var list_med = document.getElementById('list_conv');
-                 
-                var choice = list_med.selectedIndex;  // Récupération de l'index du <option> choisi
-                var valeur_cherchee = list_med.options[choice].value;
+                var choice = list_conv.selectedIndex;  // Récupération de l'index du <option> choisi
+                var valeur_cherchee = list_conv.options[choice].value;
                 // newLink.textContent=valeur_cherchee;
                 chargerConv(valeur_cherchee);
                 
@@ -84,7 +92,8 @@ and open the template in the editor.
                     method: 'POST',
                     data: {
                         action: 'ObtenirConv',
-                        idConv:idConv
+                        idConv:idConv,
+                        qui:'Client'
                     },
                    dataType: 'json'
                 }).done(function (data) {

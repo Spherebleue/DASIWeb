@@ -164,7 +164,6 @@ public class ActionServlet extends HttpServlet {
                         PrintPersonne PP = new PrintPersonne();
                         Client nouveauClient = (Client) request.getAttribute("Personne");
                         
-                        System.out.println(nouveauClient.getID());
                         PP.execute(out, nouveauClient);
                     }
                     response.setStatus(200);
@@ -345,27 +344,22 @@ public class ActionServlet extends HttpServlet {
                     PrintString PS= new PrintString();
                     if(rep)
                     {
-                        PS.execute(out,"Conversation terminée");
+                        PS.execute(out,"true");
                         response.setStatus(200);
                     }else{
-                        PS.execute(out,"Conversation en cours");
-                        response.setStatus(403);
+                        PS.execute(out,"false");
+                        response.setStatus(200);
                     }
                 }  
                 break;
             case "ObtenirTousConv":
                 action = new ActionObtenirConv();
                 action.execute(request);
-                boolean reussi = (boolean) request.getAttribute("reussi");
-                if(reussi){
-                    try (PrintWriter out = response.getWriter()) {
+                try (PrintWriter out = response.getWriter()) {
                         PrintListeConv PLC= new PrintListeConv();
-                        PLC.execute(out, (List<Conversation>)request.getAttribute("histo"));
+                        PLC.execute(out, (List<Conversation>)request.getAttribute("histo"),(boolean) request.getAttribute("nonVide"), (String)request.getParameter("qui"));
                     }  
-                }else
-                {
-                    response.setStatus(403);
-                }
+
                 break;
             case "ObtenirConv":
                 action = new ActionObtenirConvDansListe();
@@ -374,7 +368,7 @@ public class ActionServlet extends HttpServlet {
                 if(reussi2){
                     try (PrintWriter out = response.getWriter()) {
                         PrintConv PC= new PrintConv();
-                        PC.execute(out, (Conversation)request.getAttribute("Conversation"));
+                        PC.execute(out, (Conversation)request.getAttribute("Conversation"), (String)request.getParameter("qui"));
                     } 
                 }else
                 {

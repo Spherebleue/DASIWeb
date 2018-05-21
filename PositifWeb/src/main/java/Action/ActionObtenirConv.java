@@ -21,18 +21,26 @@ public class ActionObtenirConv extends Action {
     @Override
     public void execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Client clt = (Client) session.getAttribute("Personne");
-        Client clt2 = Services.SeConnecter(clt.getAdresse(),clt.getMotDePasse());
-        List<Conversation> list = clt2.getConversations();
-        if(list!=null)
+        Client clt;
+        Client clt2;
+        String qui=request.getParameter("qui");
+        Boolean b=qui.equals("Client");
+        if(b){
+            clt = (Client) session.getAttribute("Personne");
+        }else{
+            Conversation conv = (Conversation) session.getAttribute("Conversation");
+            clt = conv.getClient();
+        }
+        List<Conversation> list = clt.getConversations();
+        if(!list.isEmpty())
         {
             request.setAttribute("histo",list);
-            request.setAttribute("reussi",true);
+            request.setAttribute("nonVide",true);
             session.setAttribute("histo",list);
         }
         else
         {
-            request.setAttribute("reussi",false);
+            request.setAttribute("nonVide",false);
         }
     }
     
