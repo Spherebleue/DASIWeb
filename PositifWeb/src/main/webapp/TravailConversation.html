@@ -18,6 +18,7 @@ and open the template in the editor.
         </div>
         
         <div id = intro></div>
+        <div id = test></div>
         
         <table style="width:100%">
             <tr>
@@ -141,13 +142,13 @@ and open the template in the editor.
             
             $(document).ready(function () {
                attributClient(); 
+               attenteConvTerminee();
                document.getElementById("bouton_terminer").disabled = true;
             });
             
-            var idAttente = setInterval(attenteConvTerminee(), 3000);
-            
             function attenteConvTerminee()
             {
+                setTimeout( function(){
                 $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
@@ -160,9 +161,16 @@ and open the template in the editor.
                 }).fail(function(){
                     
                 });
+                
+                attenteConvTerminee
+                }, 5000);
             }
             
-            function commencer () {
+            function commencer () {var di =document.getElementById("test");
+                  var para = document.createElement('p');
+                        var stringTest = document.createTextNode("introduction");
+                        para.appendChild(stringTest);
+                        di.appendChild(para);
                 $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
@@ -178,38 +186,34 @@ and open the template in the editor.
             
             function promptCommentaire() {
                 var commentaire = prompt("Veuillez laisser un commentaire pour facilier le suivi du client", "");
-                
-                $.ajax({
+
+                        $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
                     data: {
                         action: 'commenterVoyance',
-                        comment: commentaire
+                        comment:commentaire
                     },
                    dataType: 'json'
-                }).done(function () {
-                    var newLink = document.getElementById('term');
-                    var txt1 = document.createTextNode(data.personne.prenom);
-                    newLink.appendChild(txt1);
-                    document.getElementById("bouton_terminer").disabled = true;
-                    document.getElementById("bouton-predictions").disabled = true;
-                    document.getElementById("bouton_commencer").disabled = false;
-                    $.ajax({
-                        url: './ActionServlet',
-                        method: 'POST',
-                        data: {
-                            action: 'terminerVoyance',
-                            comment: commentaire
-                        },
-                       dataType: 'json'
-                    });
+                }).done(function(){
+                    window:location="Travailler.html";
                 });
+                
                 
             }
             
             function terminer () {
+                 
+                 $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            action: 'terminerVoyance'
+                        },
+                       dataType: 'json'
+                    });
                 promptCommentaire();
-                window:location="Travailler.html";
+                
             }
             
             function predire() {
