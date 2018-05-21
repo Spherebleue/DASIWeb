@@ -7,6 +7,7 @@ package Action;
 
 import fr.insalyon.dasi.positif.metier.Client;
 import fr.insalyon.dasi.positif.metier.Conversation;
+import fr.insalyon.dasi.positif.service.Services;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,13 +22,22 @@ public class ActionObtenirConv extends Action {
     public void execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Client clt = (Client) session.getAttribute("Personne");
-        if(clt.getConversations()!=null)
+        Client clt2 = Services.SeConnecter(clt.getAdresse(),clt.getMotDePasse());
+        List<Conversation> list = clt2.getConversations();
+        if(list!=null)
         {
-            List<Conversation> list = clt.getConversations();
+            for(Conversation conv:list)
+            {
+                System.out.println(conv.getMedium());
+            }
             request.setAttribute("histo",list);
             request.setAttribute("reussi",true);
+            session.setAttribute("histo",list);
         }
-        request.setAttribute("reussi",false);
+        else
+        {
+            request.setAttribute("reussi",false);
+        }
     }
     
 }
