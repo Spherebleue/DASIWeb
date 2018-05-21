@@ -25,19 +25,21 @@ public class ActionObtenirConvDansListe extends Action{
         Client clt2 = Services.SeConnecter(clt.getAdresse(),clt.getMotDePasse());
         List<Conversation> list = clt2.getConversations();
         
-        Long id=Long.parseLong(((String)request.getAttribute("idConv")).split(" ")[0]);
+        String id=(request.getParameter("idConv")).split(" ")[0];
+        
         
         Conversation cherche;
+        
+        request.setAttribute("reussi",false);
         for(Conversation conv:list)
         {
-            if(conv.getID()==id)
+            if(String.valueOf(conv.getID()) == null ? id == null : String.valueOf(conv.getID()).equals(id))
             {
                 cherche=conv;
                 request.setAttribute("Conversation",cherche);
                 request.setAttribute("reussi",true);
             }
         }
-        request.setAttribute("reussi",false);
     }
     
 }
