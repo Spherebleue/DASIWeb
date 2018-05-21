@@ -340,16 +340,31 @@ public class ActionServlet extends HttpServlet {
                     }
                 }  
                 break;
-            default:
-                break;
 	    case "ObtenirTousConv":
                 action = new ActionObtenirConv();
                 action.execute(request);
-                try (PrintWriter out = response.getWriter()) {
-                    PrintListeConv PLC= new PrintListeConv();
-                    PLC.execute(out, (List<Conversation>)request.getAttribute("histo)"));
-                }  
+                boolean reussi = (boolean) request.getAttribute("reussi");
+                if(reussi){
+                    try (PrintWriter out = response.getWriter()) {
+                        PrintListeConv PLC= new PrintListeConv();
+                        PLC.execute(out, (List<Conversation>)request.getAttribute("histo"));
+                    }  
+                }else
+                {
+                    response.setStatus(403);
+                }
                 break;
+            case "ObtenirConv":
+                action = new ActionObtenirConvDansListe();
+                action.execute(request);
+                try (PrintWriter out = response.getWriter()) {
+                    PrintConv PC= new PrintConv();
+                    PC.execute(out, (Conversation)request.getAttribute("Conv"));
+                }
+                break;
+            default:
+                break;
+	    
         }  
         
      }
