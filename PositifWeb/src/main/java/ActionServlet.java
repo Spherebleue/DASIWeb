@@ -20,6 +20,7 @@ import Action.ActionParEmp;
 import Action.ActionPourcVoyance;
 import Action.ActionPredire;
 import Action.ActionTerminerVoyance;
+import Action.ActionTerminerVoyanceClient;
 import Action.ActionVoyParMedium;
 import Serial.PrintBio;
 import Serial.PrintClient;
@@ -144,14 +145,14 @@ public class ActionServlet extends HttpServlet {
                 }   
                 break;
 	    case "terminerVoyanceClient":
--                action = new ActionTerminerVoyanceClient();
--                action.execute(request);
--                try (PrintWriter out = response.getWriter()) {
--                    PrintString PS= new PrintString();
--                        PS.execute(out,"TerminerVoyanceTermine");
--                }  
--                response.setStatus(200);
--                break;
+                action = new ActionTerminerVoyanceClient();
+                action.execute(request);
+                try (PrintWriter out = response.getWriter()) {
+                    PrintString PS= new PrintString();
+                        PS.execute(out,"TerminerVoyanceTermine");
+                }  
+                response.setStatus(200);
+                break;
             case "sInscrireClient":
                 action = new ActionInscriptionClient();
                 action.execute(request);
