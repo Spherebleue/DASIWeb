@@ -44,24 +44,17 @@ and open the template in the editor.
                     if(prenom=="pas de client en attente")
                     {
                         console.log(prenom);
-                        $('#cachee').html('Bonjour '+prenom+' ! Que sou vous faire ?');
-                        var newLink = document.getElementById('cachee');
-                        var aaa = document.createElement('p');
-                        var txt1 = document.createTextNode(data.personne.prenom);
-                        aaa.appendChild(txt1);
-                        newLink.appendChild(aaa);
                     }else {
-                         $('#cachee').html('Bogdsfhre ?');
                          window.location="TravailConversation.html";
                     }
                     
                    // 
                 }).fail(function( jqXHR, textStatus ) {
-    alert( "Request failed: " + textStatus );
-  });
-                attenteClient(); // on relance la fonction
-    }, 5000); // on exécute le chargement toutes les 5 secondes
-                //clearInterval(idAttente);
+                    alert( "Request failed: " + textStatus );
+                });
+                            attenteClient(); // on relance la fonction
+                }, 5000); // on exécute le chargement toutes les 5 secondes
+                            //clearInterval(idAttente);
             }
         
         </script>

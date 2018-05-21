@@ -40,14 +40,14 @@ and open the template in the editor.
                                 <th style="width:30%">
                                     <div id="Amour"> 
                                         <a> - </a>
-                                        <input type="range" min="1" max="100" value="50" id="Range-Amour">
+                                        <input type="range" min="1" max="4" value="2" id="Range_Amour">
                                         <a> + </a>
                                     </div>
                                 </th>
                                 <th style="width:20%"> Amour </th>
                                 <th style="width:50%">
                                     <div id="PredictionAmour"> 
-                                        PredictionAmour
+                                        
                                     </div>
                                 </th>
                             </tr>
@@ -55,7 +55,7 @@ and open the template in the editor.
                                 <th style="width:30%">
                                     <div id="Sante">
                                         <a>-</a>
-                                        <input type="range" min="1" max="100" value="50" id="Range-Sante">
+                                        <input type="range" min="1" max="4" value="2" id="Range_Sante">
                                         <a>+</a>
                                     </div>
                                 </th>
@@ -69,7 +69,7 @@ and open the template in the editor.
                                 <th style="width:30%">
                                     <div id="Travail">
                                         <a>-</a>
-                                        <input type="range" min="1" max="100" value="50" id="Range-Travail">
+                                        <input type="range" min="1" max="4" value="2" id="Range_Travail">
                                         <a>+</a>
                                     </div>
                                 </th>
@@ -80,7 +80,7 @@ and open the template in the editor.
                                 </th>
                             </tr>
                         </table>
-                            <input type="button" id ="bouton-predictions" value="Prédictions" style="width:100%; background-color:grey" disabled>
+                            <input type="button" id ="bouton_predictions" value="Prédictions" style="width:100%; background-color:grey" onclick="predire()" >
                     </div>
                 </th>
             </tr>
@@ -118,25 +118,30 @@ and open the template in the editor.
                    dataType: 'json'
                 }).done(function (data) {
                     var newLink = document.getElementById('AttributClient');
-                    for (var iter = 0; iter < data.listeProprieteClt.length; iter++) {
+                    for (var iter = 0; iter < data.Conversation.listeProprieteClt.length; iter++) {
                         var row = document.createElement('tr');
                         var tup1 = document.createElement('td');
                         var tup2 = document.createElement('td');
-                        var txt1 = document.createTextNode(data.listeProprieteClt[iter].nom);
-                        var txt2 = document.createTextNode(data.listeProprieteClt[iter].valeur);
+                        var txt1 = document.createTextNode(data.Conversation.listeProprieteClt[iter].nom);
+                        var txt2 = document.createTextNode(data.Conversation.listeProprieteClt[iter].valeur);
                         tup1.appendChild(txt1);
                         tup2.appendChild(txt2);
                         row.appendChild(tup1);
                         row.appendChild(tup2);
                         newLink.appendChild(row);
                     }
+                    var introduction=data.Conversation.listeProprieteClt[3].valeur+". "+data.Conversation.listeProprieteClt[1].valeur+" "+data.Conversation.listeProprieteClt[2].valeur+" demande une voyance par "+data.Conversation.medium.nom+", "+data.Conversation.medium.Specialite;
+                        var espaceIntro = document.getElementById('intro');
+                         var par = document.createElement('p');
+                        var stringIntro = document.createTextNode(introduction);
+                        par.appendChild(stringIntro);
+                        espaceIntro.appendChild(par);
                 });
             }
             
             $(document).ready(function () {
                attributClient(); 
                document.getElementById("bouton_terminer").disabled = true;
-               document.getElementById("bouton-predictions").disabled = true;
             });
             
             var idAttente = setInterval(attenteConvTerminee(), 3000);
@@ -167,7 +172,6 @@ and open the template in the editor.
                    dataType: 'json'
                 }).done(function (data) {
                     document.getElementById("bouton_terminer").disabled = false;
-                    document.getElementById("bouton-predictions").disabled = false;
                     document.getElementById("bouton_commencer").disabled = true;
                 });
             }
@@ -206,6 +210,29 @@ and open the template in the editor.
             function terminer () {
                 promptCommentaire();
                 window:location="Travailler.html";
+            }
+            
+            function predire() {
+                var a=document.getElementById("Range_Amour").value;
+                var b=document.getElementById("Range_Sante").value;
+                var c=document.getElementById("Range_Travail").value;
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        action: 'predire',
+                        range_amour: a,
+                        range_sante:b,
+                        range_travail:c
+                    },
+                   dataType: 'json'
+                }).done(function (data){
+                    $('#PredictionAmour').html(data.liste_predictions.prediction_amour);
+                    $('#PredictionSante').html(data.liste_predictions.prediction_sante);
+                    $('#PredictionTravail').html(data.liste_predictions.prediction_travail);
+                    
+                });
             }
 
         </script>
