@@ -255,7 +255,12 @@ and open the template in the editor.
                     
                     var espaceCommentaire = document.createElement('p');
                     var Commentaire=data.conv.Commentaire;
-                    var newLinkText = document.createTextNode("Commentaire : " +Commentaire);
+                    var newLinkText;
+                    if(Commentaire==null){
+                        newLinkText = document.createTextNode("Aucun commentaire");
+                    }else{
+                        newLinkText = document.createTextNode("Commentaire : " +Commentaire);
+                    }
                     espaceCommentaire.appendChild(newLinkText);
                     espaceMessage.appendChild(espaceCommentaire);
                     espaceMessage.appendChild(document.createElement('br'));
