@@ -142,13 +142,13 @@ and open the template in the editor.
             
             $(document).ready(function () {
                attributClient(); 
+               attenteConvTerminee();
                document.getElementById("bouton_terminer").disabled = true;
             });
             
-            var idAttente = setInterval(attenteConvTerminee(), 3000);
-            
             function attenteConvTerminee()
             {
+                setTimeout( function(){
                 $.ajax({
                     url: './ActionServlet',
                     method: 'POST',
@@ -161,6 +161,9 @@ and open the template in the editor.
                 }).fail(function(){
                     
                 });
+                
+                attenteConvTerminee
+                }, 5000);
             }
             
             function commencer () {var di =document.getElementById("test");
