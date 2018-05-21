@@ -14,18 +14,20 @@ import Action.ActionDemanderVoyance;
 import Action.ActionInscriptionClient;
 import Action.ActionListerTousMediums;
 import Action.ActionObtenirBio;
-import Action.ActionObtenirHistoClient;
+import Action.ActionObtenirConv;
+import Action.ActionObtenirConvDansListe;
 import Action.ActionParEmp;
 import Action.ActionPourcVoyance;
 import Action.ActionPredire;
 import Action.ActionTerminerVoyance;
-import Action.ActionTerminerVoyanceClient;
 import Action.ActionVoyParMedium;
 import Serial.PrintBio;
 import Serial.PrintClient;
+import Serial.PrintConv;
 import Serial.PrintHashMapFloat;
 import Serial.PrintHashMapStrInt;
 import Serial.PrintListMediums;
+import Serial.PrintListeConv;
 import Serial.PrintMedium;
 import Serial.PrintPersonne;
 import Serial.PrintPredictions;
@@ -182,7 +184,6 @@ public class ActionServlet extends HttpServlet {
                     PrintListMediums PLM = new PrintListMediums();
                     Medium m = (Medium)request.getAttribute ("medium_jour");
                     List<Medium> lM = (List<Medium>)request.getAttribute ("liste_medium");
-                    System.out.println (m.getNom());
                     PLM.execute(out, m, lM);
                 }       
                 response.setStatus(200);
@@ -213,10 +214,6 @@ public class ActionServlet extends HttpServlet {
                     PHM.execute(out, (HashMap) request.getAttribute("Camembert"));
                 }       
                 response.setStatus(200);
-                break;
-                case "ObtenirHistoriqueClient" :
-                action= new ActionObtenirHistoClient();
-                action.execute(request);
                 break;
             case "afficherProfil":
                 action = new ActionAfficherProfil();
@@ -293,15 +290,6 @@ public class ActionServlet extends HttpServlet {
                     }
                 }
                 break;
-            case "terminerVoyanceClient":
-                action = new ActionTerminerVoyanceClient();
-                action.execute(request);
-                try (PrintWriter out = response.getWriter()) {
-                    PrintString PS= new PrintString();
-                        PS.execute(out,"TerminerVoyanceTermine");
-                }  
-                response.setStatus(200);
-                break;
             case "terminerVoyance":
                 action = new ActionTerminerVoyance();
                 action.execute(request);
@@ -355,7 +343,7 @@ public class ActionServlet extends HttpServlet {
                     }
                 }  
                 break;
-          case "ObtenirTousConv":
+            case "ObtenirTousConv":
                 action = new ActionObtenirConv();
                 action.execute(request);
                 boolean reussi = (boolean) request.getAttribute("reussi");
@@ -375,17 +363,17 @@ public class ActionServlet extends HttpServlet {
                 boolean reussi2 = (boolean) request.getAttribute("reussi");
                 if(reussi2){
                     try (PrintWriter out = response.getWriter()) {
-                    PrintConv PC= new PrintConv();
-                    PC.execute(out, (Conversation)request.getAttribute("Conv"));
-                } 
+                        PrintConv PC= new PrintConv();
+                        PC.execute(out, (Conversation)request.getAttribute("Conversation"));
+                    } 
                 }else
                 {
                     response.setStatus(403);
                 }
+                
                 break;
             default:
                 break;
-	    
         }  
         
      }
