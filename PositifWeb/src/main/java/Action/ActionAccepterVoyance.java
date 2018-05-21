@@ -7,7 +7,6 @@ package Action;
 
 import fr.insalyon.dasi.positif.metier.Conversation;
 import fr.insalyon.dasi.positif.service.Services;
-import static java.lang.System.out;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 

@@ -21,6 +21,7 @@ public class ActionCommenterVoyance extends Action{
         HttpSession session = request.getSession(false);
         String com = request.getParameter("comment");
         Conversation conv = (Conversation) session.getAttribute("Conversation");
+        Services.TerminerVoyance(conv);
         Services.CommenterVoyance(conv, com);
         session.removeAttribute("Conversation");
         request.removeAttribute("Conversation");
