@@ -24,11 +24,13 @@ public class ActionObtenirConvDansListe extends Action{
         Client clt = (Client) session.getAttribute("Personne");
         Client clt2 = Services.SeConnecter(clt.getAdresse(),clt.getMotDePasse());
         List<Conversation> list = clt2.getConversations();
+        
+        Long id=Long.parseLong(((String)request.getAttribute("idConv")).split(" ")[0]);
+        
         Conversation cherche;
-        boolean trouve =false;
         for(Conversation conv:list)
         {
-            if(conv.getID()==request.getAttribute("idConv"))
+            if(conv.getID()==id)
             {
                 cherche=conv;
                 request.setAttribute("Conversation",cherche);
