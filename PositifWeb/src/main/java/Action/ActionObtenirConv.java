@@ -26,10 +26,6 @@ public class ActionObtenirConv extends Action {
         List<Conversation> list = clt2.getConversations();
         if(list!=null)
         {
-            for(Conversation conv:list)
-            {
-                System.out.println(conv.getMedium());
-            }
             request.setAttribute("histo",list);
             request.setAttribute("reussi",true);
             session.setAttribute("histo",list);
