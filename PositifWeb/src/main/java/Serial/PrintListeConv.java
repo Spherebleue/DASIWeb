@@ -36,6 +36,7 @@ public class PrintListeConv {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             jsonMedium2.addProperty("DateDebut", sdf.format(date));
             jsonListe.add(jsonMedium2);
+            System.out.println(conv.getMedium().getNom());
         }
         
         JsonObject container = new JsonObject();
